@@ -1,0 +1,36 @@
+
+/* Class = "UILabel"; text = "允许选择Gif图片"; ObjectID = "53G-WI-IZw"; */
+"53G-WI-IZw.text" = "允许选择Gif图片";
+
+/* Class = "UILabel"; text = "照片最大可选张数"; ObjectID = "BHm-4z-bG4"; */
+"BHm-4z-bG4.text" = "照片最大可选张数";
+
+/* Class = "UILabel"; text = "允许选择照片"; ObjectID = "DHT-kt-moN"; */
+"DHT-kt-moN.text" = "允许选择照片";
+
+/* Class = "UILabel"; text = "显示内部拍照按钮"; ObjectID = "DnZ-g2-mSt"; */
+"DnZ-g2-mSt.text" = "显示内部拍照按钮";
+
+/* Class = "UITextField"; text = "4"; ObjectID = "EEI-8m-48E"; */
+"EEI-8m-48E.text" = "4";
+
+/* Class = "UILabel"; text = "使用圆形裁剪框"; ObjectID = "KxI-c4-htI"; */
+"KxI-c4-htI.text" = "使用圆形裁剪框";
+
+/* Class = "UILabel"; text = "把拍照按钮放在外面"; ObjectID = "Qrt-sm-byR"; */
+"Qrt-sm-byR.text" = "把拍照按钮放在外面";
+
+/* Class = "UITextField"; text = "9"; ObjectID = "Qug-Il-K8m"; */
+"Qug-Il-K8m.text" = "9";
+
+/* Class = "UILabel"; text = "照片按修改时间升序排列"; ObjectID = "Uvf-Gu-kqe"; */
+"Uvf-Gu-kqe.text" = "照片按修改时间升序排列";
+
+/* Class = "UILabel"; text = "允许选择照片原图"; ObjectID = "WeK-3c-twh"; */
+"WeK-3c-twh.text" = "允许选择照片原图";
+
+/* Class = "UILabel"; text = "允许选择视频"; ObjectID = "r3p-0b-jCs"; */
+"r3p-0b-jCs.text" = "允许选择视频";
+
+/* Class = "UILabel"; text = "每行展示照片张数"; ObjectID = "xey-IM-ome"; */
+"xey-IM-ome.text" = "每行展示照片张数";
