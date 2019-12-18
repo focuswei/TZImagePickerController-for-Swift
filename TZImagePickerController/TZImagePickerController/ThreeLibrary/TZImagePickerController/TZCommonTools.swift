@@ -46,30 +46,29 @@ class TZCommonTools {
     
     
     static func getKeyWindow() -> UIWindow? {
-        //FIXME:iOS13.0
-//        guard #available(iOS 13.0, *) else  {
+        guard #available(iOS 13.0, *) else  {
             return UIApplication.shared.keyWindow
-//        }
+        }
         
-//        let keyWindow = UIApplication.shared.windows
-//            .filter({ $0.isKeyWindow })
-//            .first
-//        return keyWindow
+        let keyWindow = UIApplication.shared.windows
+            .filter({ $0.isKeyWindow })
+            .first
+        return keyWindow
     }
     
     static func isStatusBarHidden() -> Bool {
-//        guard #available(iOS 13.0, *) else {
+        guard #available(iOS 13.0, *) else {
             return UIApplication.shared.isStatusBarHidden
-//        }
+        }
         
-//        return  TZCommonTools.getKeyWindow()?.windowScene?.statusBarManager?.isStatusBarHidden ?? false
+        return  TZCommonTools.getKeyWindow()?.windowScene?.statusBarManager?.isStatusBarHidden ?? false
     }
     
     static func getStatusBarStyle() -> UIStatusBarStyle {
-//        guard #available(iOS 13.0, *) else {
+        guard #available(iOS 13.0, *) else {
             return UIApplication.shared.statusBarStyle
-//        }
-//        return  TZCommonTools.getKeyWindow()?.windowScene?.statusBarManager?.statusBarStyle ?? UIStatusBarStyle.default
+        }
+        return  TZCommonTools.getKeyWindow()?.windowScene?.statusBarManager?.statusBarStyle ?? UIStatusBarStyle.default
     }
     
     static func tz_statusBarHeight() -> CGFloat {
