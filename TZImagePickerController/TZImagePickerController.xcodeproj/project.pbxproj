@@ -1,0 +1,596 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 50;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		444F9BA0238BC64A008C8DC2 /* TZLocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 444F9B9F238BC64A008C8DC2 /* TZLocationManager.swift */; };
+		446F6244238D24F200584F4F /* TZCommonTools.swift in Sources */ = {isa = PBXBuildFile; fileRef = 446F6243238D24F200584F4F /* TZCommonTools.swift */; };
+		4489425623961576003A955F /* TZVideoPlayerController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4489425523961576003A955F /* TZVideoPlayerController.swift */; };
+		4489425823963745003A955F /* TZGifPhotoPreviewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4489425723963745003A955F /* TZGifPhotoPreviewController.swift */; };
+		4489425E239A4F97003A955F /* TZImagePickerController.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 4489425D239A4F97003A955F /* TZImagePickerController.bundle */; };
+		44A6A56823A774B5001C3003 /* TZColorConfigure.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44A6A56723A774B5001C3003 /* TZColorConfigure.swift */; };
+		44B7FD142383C7DC00F478C1 /* TZImageCropManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44B7FD132383C7DC00F478C1 /* TZImageCropManager.swift */; };
+		44B7FD162383E2A400F478C1 /* TZImageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44B7FD152383E2A400F478C1 /* TZImageManager.swift */; };
+		44B80DD6238CFA1200A86964 /* TZPhotoPickerController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44B80DD5238CFA1200A86964 /* TZPhotoPickerController.swift */; };
+		44B80DD8238D0D2700A86964 /* TZPhotoPreviewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44B80DD7238D0D2700A86964 /* TZPhotoPreviewController.swift */; };
+		44B80DDC238D0FD700A86964 /* TZAlbumPickerController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44B80DDB238D0FD700A86964 /* TZAlbumPickerController.swift */; };
+		44DACB22237D0311003D87E5 /* TZImagePickerController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44DACB21237D0311003D87E5 /* TZImagePickerController.swift */; };
+		44DFA076237A4AA700AFA39B /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44DFA075237A4AA700AFA39B /* AppDelegate.swift */; };
+		44DFA07A237A4AA700AFA39B /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44DFA079237A4AA700AFA39B /* ViewController.swift */; };
+		44DFA07D237A4AA700AFA39B /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 44DFA07B237A4AA700AFA39B /* Main.storyboard */; };
+		44DFA07F237A4AA800AFA39B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 44DFA07E237A4AA800AFA39B /* Assets.xcassets */; };
+		44DFA082237A4AA800AFA39B /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 44DFA080237A4AA800AFA39B /* LaunchScreen.storyboard */; };
+		44DFA08D237A4AA900AFA39B /* TZImagePickerControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44DFA08C237A4AA900AFA39B /* TZImagePickerControllerTests.swift */; };
+		44DFA09A237A4BF800AFA39B /* TZAssetPreviewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44DFA099237A4BF800AFA39B /* TZAssetPreviewCell.swift */; };
+		44DFA09D237A4C4400AFA39B /* TZAssetModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44DFA09C237A4C4400AFA39B /* TZAssetModel.swift */; };
+		44DFA09F237A59E800AFA39B /* UIView+TZLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44DFA09E237A59E800AFA39B /* UIView+TZLayout.swift */; };
+		44DFA0A1237A861400AFA39B /* Bundle+TZImagePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44DFA0A0237A861400AFA39B /* Bundle+TZImagePicker.swift */; };
+		44DFA0A5237A91CB00AFA39B /* TZPhotoPreviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44DFA0A4237A91CB00AFA39B /* TZPhotoPreviewView.swift */; };
+		44DFA0A7237A925100AFA39B /* TZProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44DFA0A6237A925100AFA39B /* TZProgressView.swift */; };
+		44DFA0AA237BF73300AFA39B /* TZAssetCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44DFA0A9237BF73300AFA39B /* TZAssetCell.swift */; };
+		44DFA0AC237C0CA400AFA39B /* UIImage+TZBundle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44DFA0AB237C0CA400AFA39B /* UIImage+TZBundle.swift */; };
+		44F7B644237EA376004ADA27 /* TZAlbumCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44F7B643237EA376004ADA27 /* TZAlbumCell.swift */; };
+		44FDBA6623A0D5C700E6B4E2 /* TZImageRequestOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44FDBA6523A0D5C700E6B4E2 /* TZImageRequestOperation.swift */; };
+		44FDBA6823A0F11800E6B4E2 /* TZTestCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44FDBA6723A0F11800E6B4E2 /* TZTestCell.swift */; };
+		44FDBA6A23A0F12000E6B4E2 /* LxGridViewFlowLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44FDBA6923A0F12000E6B4E2 /* LxGridViewFlowLayout.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		44DFA089237A4AA900AFA39B /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 44DFA06A237A4AA700AFA39B /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 44DFA071237A4AA700AFA39B;
+			remoteInfo = TZImagePickerController;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		444F9B9F238BC64A008C8DC2 /* TZLocationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TZLocationManager.swift; sourceTree = "<group>"; };
+		446F6243238D24F200584F4F /* TZCommonTools.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TZCommonTools.swift; sourceTree = "<group>"; };
+		4489425523961576003A955F /* TZVideoPlayerController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TZVideoPlayerController.swift; sourceTree = "<group>"; };
+		4489425723963745003A955F /* TZGifPhotoPreviewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TZGifPhotoPreviewController.swift; sourceTree = "<group>"; };
+		4489425D239A4F97003A955F /* TZImagePickerController.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = TZImagePickerController.bundle; sourceTree = "<group>"; };
+		44A6A56323A763B1001C3003 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Main.strings"; sourceTree = "<group>"; };
+		44A6A56423A763B1001C3003 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/LaunchScreen.strings"; sourceTree = "<group>"; };
+		44A6A56523A763C1001C3003 /* zh-HK */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-HK"; path = "zh-HK.lproj/Main.strings"; sourceTree = "<group>"; };
+		44A6A56623A763C1001C3003 /* zh-HK */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-HK"; path = "zh-HK.lproj/LaunchScreen.strings"; sourceTree = "<group>"; };
+		44A6A56723A774B5001C3003 /* TZColorConfigure.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TZColorConfigure.swift; sourceTree = "<group>"; };
+		44B7FD132383C7DC00F478C1 /* TZImageCropManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TZImageCropManager.swift; sourceTree = "<group>"; };
+		44B7FD152383E2A400F478C1 /* TZImageManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TZImageManager.swift; sourceTree = "<group>"; };
+		44B80DD5238CFA1200A86964 /* TZPhotoPickerController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TZPhotoPickerController.swift; sourceTree = "<group>"; };
+		44B80DD7238D0D2700A86964 /* TZPhotoPreviewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TZPhotoPreviewController.swift; sourceTree = "<group>"; };
+		44B80DDB238D0FD700A86964 /* TZAlbumPickerController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TZAlbumPickerController.swift; sourceTree = "<group>"; };
+		44DACB21237D0311003D87E5 /* TZImagePickerController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TZImagePickerController.swift; sourceTree = "<group>"; };
+		44DFA072237A4AA700AFA39B /* TZImagePickerController.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TZImagePickerController.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		44DFA075237A4AA700AFA39B /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		44DFA079237A4AA700AFA39B /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		44DFA07C237A4AA700AFA39B /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		44DFA07E237A4AA800AFA39B /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		44DFA081237A4AA800AFA39B /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		44DFA083237A4AA800AFA39B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		44DFA088237A4AA900AFA39B /* TZImagePickerControllerTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TZImagePickerControllerTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		44DFA08C237A4AA900AFA39B /* TZImagePickerControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TZImagePickerControllerTests.swift; sourceTree = "<group>"; };
+		44DFA08E237A4AA900AFA39B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		44DFA099237A4BF800AFA39B /* TZAssetPreviewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TZAssetPreviewCell.swift; sourceTree = "<group>"; };
+		44DFA09C237A4C4400AFA39B /* TZAssetModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TZAssetModel.swift; sourceTree = "<group>"; };
+		44DFA09E237A59E800AFA39B /* UIView+TZLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+TZLayout.swift"; sourceTree = "<group>"; };
+		44DFA0A0237A861400AFA39B /* Bundle+TZImagePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Bundle+TZImagePicker.swift"; sourceTree = "<group>"; };
+		44DFA0A4237A91CB00AFA39B /* TZPhotoPreviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TZPhotoPreviewView.swift; sourceTree = "<group>"; };
+		44DFA0A6237A925100AFA39B /* TZProgressView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TZProgressView.swift; sourceTree = "<group>"; };
+		44DFA0A9237BF73300AFA39B /* TZAssetCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TZAssetCell.swift; sourceTree = "<group>"; };
+		44DFA0AB237C0CA400AFA39B /* UIImage+TZBundle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+TZBundle.swift"; sourceTree = "<group>"; };
+		44F7B643237EA376004ADA27 /* TZAlbumCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TZAlbumCell.swift; sourceTree = "<group>"; };
+		44FDBA6523A0D5C700E6B4E2 /* TZImageRequestOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TZImageRequestOperation.swift; sourceTree = "<group>"; };
+		44FDBA6723A0F11800E6B4E2 /* TZTestCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TZTestCell.swift; sourceTree = "<group>"; };
+		44FDBA6923A0F12000E6B4E2 /* LxGridViewFlowLayout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LxGridViewFlowLayout.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		44DFA06F237A4AA700AFA39B /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		44DFA085237A4AA900AFA39B /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		44DFA069237A4AA700AFA39B = {
+			isa = PBXGroup;
+			children = (
+				44DFA074237A4AA700AFA39B /* TZImagePickerController */,
+				44DFA08B237A4AA900AFA39B /* TZImagePickerControllerTests */,
+				44DFA073237A4AA700AFA39B /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		44DFA073237A4AA700AFA39B /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				44DFA072237A4AA700AFA39B /* TZImagePickerController.app */,
+				44DFA088237A4AA900AFA39B /* TZImagePickerControllerTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		44DFA074237A4AA700AFA39B /* TZImagePickerController */ = {
+			isa = PBXGroup;
+			children = (
+				44DFA097237A4BC400AFA39B /* ThreeLibrary */,
+				44DFA075237A4AA700AFA39B /* AppDelegate.swift */,
+				44DFA079237A4AA700AFA39B /* ViewController.swift */,
+				44FDBA6923A0F12000E6B4E2 /* LxGridViewFlowLayout.swift */,
+				44FDBA6723A0F11800E6B4E2 /* TZTestCell.swift */,
+				44DFA07B237A4AA700AFA39B /* Main.storyboard */,
+				44DFA07E237A4AA800AFA39B /* Assets.xcassets */,
+				44DFA080237A4AA800AFA39B /* LaunchScreen.storyboard */,
+				44DFA083237A4AA800AFA39B /* Info.plist */,
+			);
+			path = TZImagePickerController;
+			sourceTree = "<group>";
+		};
+		44DFA08B237A4AA900AFA39B /* TZImagePickerControllerTests */ = {
+			isa = PBXGroup;
+			children = (
+				44DFA08C237A4AA900AFA39B /* TZImagePickerControllerTests.swift */,
+				44DFA08E237A4AA900AFA39B /* Info.plist */,
+			);
+			path = TZImagePickerControllerTests;
+			sourceTree = "<group>";
+		};
+		44DFA097237A4BC400AFA39B /* ThreeLibrary */ = {
+			isa = PBXGroup;
+			children = (
+				44DFA098237A4BD400AFA39B /* TZImagePickerController */,
+			);
+			path = ThreeLibrary;
+			sourceTree = "<group>";
+		};
+		44DFA098237A4BD400AFA39B /* TZImagePickerController */ = {
+			isa = PBXGroup;
+			children = (
+				4489425D239A4F97003A955F /* TZImagePickerController.bundle */,
+				44DFA0AB237C0CA400AFA39B /* UIImage+TZBundle.swift */,
+				44DFA09E237A59E800AFA39B /* UIView+TZLayout.swift */,
+				44A6A56723A774B5001C3003 /* TZColorConfigure.swift */,
+				44DFA0A0237A861400AFA39B /* Bundle+TZImagePicker.swift */,
+				44DFA09C237A4C4400AFA39B /* TZAssetModel.swift */,
+				44FDBA6523A0D5C700E6B4E2 /* TZImageRequestOperation.swift */,
+				44DFA0A6237A925100AFA39B /* TZProgressView.swift */,
+				44DFA0A4237A91CB00AFA39B /* TZPhotoPreviewView.swift */,
+				44DFA099237A4BF800AFA39B /* TZAssetPreviewCell.swift */,
+				44DFA0A9237BF73300AFA39B /* TZAssetCell.swift */,
+				44F7B643237EA376004ADA27 /* TZAlbumCell.swift */,
+				44B80DD5238CFA1200A86964 /* TZPhotoPickerController.swift */,
+				4489425723963745003A955F /* TZGifPhotoPreviewController.swift */,
+				446F6243238D24F200584F4F /* TZCommonTools.swift */,
+				44B80DD7238D0D2700A86964 /* TZPhotoPreviewController.swift */,
+				4489425523961576003A955F /* TZVideoPlayerController.swift */,
+				44DACB21237D0311003D87E5 /* TZImagePickerController.swift */,
+				44B80DDB238D0FD700A86964 /* TZAlbumPickerController.swift */,
+				444F9B9F238BC64A008C8DC2 /* TZLocationManager.swift */,
+				44B7FD132383C7DC00F478C1 /* TZImageCropManager.swift */,
+				44B7FD152383E2A400F478C1 /* TZImageManager.swift */,
+			);
+			path = TZImagePickerController;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		44DFA071237A4AA700AFA39B /* TZImagePickerController */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 44DFA091237A4AA900AFA39B /* Build configuration list for PBXNativeTarget "TZImagePickerController" */;
+			buildPhases = (
+				44DFA06E237A4AA700AFA39B /* Sources */,
+				44DFA06F237A4AA700AFA39B /* Frameworks */,
+				44DFA070237A4AA700AFA39B /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = TZImagePickerController;
+			productName = TZImagePickerController;
+			productReference = 44DFA072237A4AA700AFA39B /* TZImagePickerController.app */;
+			productType = "com.apple.product-type.application";
+		};
+		44DFA087237A4AA900AFA39B /* TZImagePickerControllerTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 44DFA094237A4AA900AFA39B /* Build configuration list for PBXNativeTarget "TZImagePickerControllerTests" */;
+			buildPhases = (
+				44DFA084237A4AA900AFA39B /* Sources */,
+				44DFA085237A4AA900AFA39B /* Frameworks */,
+				44DFA086237A4AA900AFA39B /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				44DFA08A237A4AA900AFA39B /* PBXTargetDependency */,
+			);
+			name = TZImagePickerControllerTests;
+			productName = TZImagePickerControllerTests;
+			productReference = 44DFA088237A4AA900AFA39B /* TZImagePickerControllerTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		44DFA06A237A4AA700AFA39B /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastSwiftUpdateCheck = 1120;
+				LastUpgradeCheck = 1120;
+				ORGANIZATIONNAME = centaline;
+				TargetAttributes = {
+					44DFA071237A4AA700AFA39B = {
+						CreatedOnToolsVersion = 11.2;
+					};
+					44DFA087237A4AA900AFA39B = {
+						CreatedOnToolsVersion = 11.2;
+						TestTargetID = 44DFA071237A4AA700AFA39B;
+					};
+				};
+			};
+			buildConfigurationList = 44DFA06D237A4AA700AFA39B /* Build configuration list for PBXProject "TZImagePickerController" */;
+			compatibilityVersion = "Xcode 9.3";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+				"zh-Hans",
+				"zh-HK",
+			);
+			mainGroup = 44DFA069237A4AA700AFA39B;
+			productRefGroup = 44DFA073237A4AA700AFA39B /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				44DFA071237A4AA700AFA39B /* TZImagePickerController */,
+				44DFA087237A4AA900AFA39B /* TZImagePickerControllerTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		44DFA070237A4AA700AFA39B /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				44DFA082237A4AA800AFA39B /* LaunchScreen.storyboard in Resources */,
+				4489425E239A4F97003A955F /* TZImagePickerController.bundle in Resources */,
+				44DFA07F237A4AA800AFA39B /* Assets.xcassets in Resources */,
+				44DFA07D237A4AA700AFA39B /* Main.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		44DFA086237A4AA900AFA39B /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		44DFA06E237A4AA700AFA39B /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				44DFA09F237A59E800AFA39B /* UIView+TZLayout.swift in Sources */,
+				44B80DD6238CFA1200A86964 /* TZPhotoPickerController.swift in Sources */,
+				44DFA07A237A4AA700AFA39B /* ViewController.swift in Sources */,
+				44B80DD8238D0D2700A86964 /* TZPhotoPreviewController.swift in Sources */,
+				4489425823963745003A955F /* TZGifPhotoPreviewController.swift in Sources */,
+				44DFA0A1237A861400AFA39B /* Bundle+TZImagePicker.swift in Sources */,
+				44A6A56823A774B5001C3003 /* TZColorConfigure.swift in Sources */,
+				44FDBA6A23A0F12000E6B4E2 /* LxGridViewFlowLayout.swift in Sources */,
+				44DFA0A7237A925100AFA39B /* TZProgressView.swift in Sources */,
+				444F9BA0238BC64A008C8DC2 /* TZLocationManager.swift in Sources */,
+				44DFA0AC237C0CA400AFA39B /* UIImage+TZBundle.swift in Sources */,
+				446F6244238D24F200584F4F /* TZCommonTools.swift in Sources */,
+				44FDBA6823A0F11800E6B4E2 /* TZTestCell.swift in Sources */,
+				44DFA076237A4AA700AFA39B /* AppDelegate.swift in Sources */,
+				44DFA09D237A4C4400AFA39B /* TZAssetModel.swift in Sources */,
+				44B7FD142383C7DC00F478C1 /* TZImageCropManager.swift in Sources */,
+				44DACB22237D0311003D87E5 /* TZImagePickerController.swift in Sources */,
+				4489425623961576003A955F /* TZVideoPlayerController.swift in Sources */,
+				44F7B644237EA376004ADA27 /* TZAlbumCell.swift in Sources */,
+				44DFA0A5237A91CB00AFA39B /* TZPhotoPreviewView.swift in Sources */,
+				44DFA0AA237BF73300AFA39B /* TZAssetCell.swift in Sources */,
+				44FDBA6623A0D5C700E6B4E2 /* TZImageRequestOperation.swift in Sources */,
+				44B80DDC238D0FD700A86964 /* TZAlbumPickerController.swift in Sources */,
+				44DFA09A237A4BF800AFA39B /* TZAssetPreviewCell.swift in Sources */,
+				44B7FD162383E2A400F478C1 /* TZImageManager.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		44DFA084237A4AA900AFA39B /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				44DFA08D237A4AA900AFA39B /* TZImagePickerControllerTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		44DFA08A237A4AA900AFA39B /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 44DFA071237A4AA700AFA39B /* TZImagePickerController */;
+			targetProxy = 44DFA089237A4AA900AFA39B /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		44DFA07B237A4AA700AFA39B /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				44DFA07C237A4AA700AFA39B /* Base */,
+				44A6A56323A763B1001C3003 /* zh-Hans */,
+				44A6A56523A763C1001C3003 /* zh-HK */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		44DFA080237A4AA800AFA39B /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				44DFA081237A4AA800AFA39B /* Base */,
+				44A6A56423A763B1001C3003 /* zh-Hans */,
+				44A6A56623A763C1001C3003 /* zh-HK */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		44DFA08F237A4AA900AFA39B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.2;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		44DFA090237A4AA900AFA39B /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.2;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		44DFA092237A4AA900AFA39B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 37M52ZQXNN;
+				INFOPLIST_FILE = TZImagePickerController/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.centa.imagepicker.TZImagePickerController;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 4.2;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		44DFA093237A4AA900AFA39B /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 37M52ZQXNN;
+				INFOPLIST_FILE = TZImagePickerController/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.centa.imagepicker.TZImagePickerController;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 4.2;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		44DFA095237A4AA900AFA39B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 37M52ZQXNN;
+				INFOPLIST_FILE = TZImagePickerControllerTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.2;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.centa.imagepicker.TZImagePickerControllerTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/TZImagePickerController.app/TZImagePickerController";
+			};
+			name = Debug;
+		};
+		44DFA096237A4AA900AFA39B /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 37M52ZQXNN;
+				INFOPLIST_FILE = TZImagePickerControllerTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.2;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.centa.imagepicker.TZImagePickerControllerTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/TZImagePickerController.app/TZImagePickerController";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		44DFA06D237A4AA700AFA39B /* Build configuration list for PBXProject "TZImagePickerController" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				44DFA08F237A4AA900AFA39B /* Debug */,
+				44DFA090237A4AA900AFA39B /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		44DFA091237A4AA900AFA39B /* Build configuration list for PBXNativeTarget "TZImagePickerController" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				44DFA092237A4AA900AFA39B /* Debug */,
+				44DFA093237A4AA900AFA39B /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		44DFA094237A4AA900AFA39B /* Build configuration list for PBXNativeTarget "TZImagePickerControllerTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				44DFA095237A4AA900AFA39B /* Debug */,
+				44DFA096237A4AA900AFA39B /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 44DFA06A237A4AA700AFA39B /* Project object */;
+}
