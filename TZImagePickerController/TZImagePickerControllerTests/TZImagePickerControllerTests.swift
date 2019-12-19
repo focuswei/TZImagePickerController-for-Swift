@@ -2,8 +2,8 @@
 //  TZImagePickerControllerTests.swift
 //  TZImagePickerControllerTests
 //
-//  Created by guozw3 on 2019/11/12.
-//  Copyright © 2019 centaline. All rights reserved.
+//  Created by FocusWei on 2019/11/12.
+//  Copyright © 2019 FocusWei. All rights reserved.
 //
 
 import XCTest

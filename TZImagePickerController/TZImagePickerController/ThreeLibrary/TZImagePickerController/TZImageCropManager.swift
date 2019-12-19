@@ -2,8 +2,8 @@
 //  TZImageCropManager.swift
 //  TZImagePickerController
 //
-//  Created by guozw3 on 2019/11/19.
-//  Copyright © 2019 centaline. All rights reserved.
+//  Created by FocusWei on 2019/11/19.
+//  Copyright © 2019 FocusWei. All rights reserved.
 //
 
 import UIKit
