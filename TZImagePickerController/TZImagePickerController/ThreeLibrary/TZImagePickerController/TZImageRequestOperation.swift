@@ -16,35 +16,67 @@ class TZImageRequestOperation: Operation {
     typealias TZImageRequestProgressClosure = ((_ progress: Double, _ info: Error?, _ stop: Bool, _ info: [AnyHashable:Any]?) -> Void)?
     
     var completedClosure: TZImageRequestCompletedClosure
-    var myIsExecuting: Bool
-    var myIsFinished: Bool
     var progressClosure: TZImageRequestProgressClosure
+    
+    private let lockQueue = DispatchQueue(label: "com.focuswei.async", attributes: .concurrent)
+    var myIsExecuting: Bool = false
+    var myIsFinished: Bool = false
     var phasset: PHAsset?
     
     override var isAsynchronous: Bool {
         return true
     }
     
-    override var isExecuting: Bool {
-        return myIsExecuting
+    override private(set) var isExecuting: Bool {
+        get {
+            return lockQueue.sync { () -> Bool in
+                return myIsExecuting
+            }
+        }
+
+        set {
+            willChangeValue(forKey: "isExecuting")
+            lockQueue.sync(flags: [.barrier]) {
+                myIsExecuting = newValue
+            }
+            didChangeValue(forKey: "isExecuting")
+        }
     }
     
-    override var isFinished: Bool {
-        return myIsFinished
+    override private(set) var isFinished: Bool {
+        get {
+            return lockQueue.sync { () -> Bool in
+                return myIsFinished
+            }
+        }
+
+        set {
+            willChangeValue(forKey: "isFinished")
+            lockQueue.sync(flags: [.barrier]) {
+                myIsFinished = newValue
+            }
+            didChangeValue(forKey: "isFinished")
+        }
     }
     
     init(with asset: PHAsset, callback: TZImageRequestCompletedClosure, progressCallback: TZImageRequestProgressClosure) {
         phasset = asset
-        myIsExecuting = false
-        myIsFinished = false
         completedClosure = callback
         progressClosure = progressCallback
-        super.init()
     }
     
     internal override func start() {
-        super.start()
-        guard let asset = self.phasset else { return }
+        
+        guard !isCancelled else {
+            /// 支持取消
+            done()
+            return
+        }
+        
+        guard let asset = self.phasset else {
+            done()
+            return
+        }
         
         self.myIsExecuting = true
         DispatchQueue.global().async {
@@ -67,10 +99,9 @@ class TZImageRequestOperation: Operation {
     
     
     private func done() {
-        self.myIsExecuting = true
+        self.myIsExecuting = false
         self.myIsFinished = true
         self.reset()
-        self.cancel()
     }
     
     private func reset() {
