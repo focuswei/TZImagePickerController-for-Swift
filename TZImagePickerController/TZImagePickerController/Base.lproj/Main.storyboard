@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="15505" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="17701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15510"/>
-        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17703"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -12,6 +12,10 @@
         <scene sceneID="tne-QT-ifu">
             <objects>
                 <viewController id="BYZ-38-t0r" customClass="ViewController" customModule="TZImagePickerController" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="OUC-1X-0NI"/>
+                        <viewControllerLayoutGuide type="bottom" id="4UL-0P-utn"/>
+                    </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -325,7 +329,7 @@
                                                 </constraints>
                                             </view>
                                         </subviews>
-                                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                         <constraints>
                                             <constraint firstAttribute="trailing" secondItem="Nyp-dX-sUf" secondAttribute="trailing" id="08Q-su-btW"/>
                                             <constraint firstItem="I0J-AZ-Sp6" firstAttribute="top" secondItem="mbn-Pw-hkO" secondAttribute="bottom" id="3af-az-JJX"/>
@@ -384,18 +388,15 @@
                                     <constraint firstItem="8cr-DU-gOB" firstAttribute="leading" secondItem="dOY-8V-gNd" secondAttribute="leading" id="tag-RP-57w"/>
                                     <constraint firstAttribute="bottom" secondItem="8cr-DU-gOB" secondAttribute="bottom" id="zSx-8x-2sW"/>
                                 </constraints>
-                                <viewLayoutGuide key="contentLayoutGuide" id="A9L-OX-xb1"/>
-                                <viewLayoutGuide key="frameLayoutGuide" id="N4s-Zq-LDa"/>
                             </scrollView>
                         </subviews>
-                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
-                            <constraint firstItem="dOY-8V-gNd" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="Sg2-BU-Mqd"/>
-                            <constraint firstItem="dOY-8V-gNd" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" id="Vt2-i2-XRH"/>
-                            <constraint firstItem="dOY-8V-gNd" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" id="drq-yP-dR1"/>
+                            <constraint firstItem="dOY-8V-gNd" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="Sg2-BU-Mqd"/>
+                            <constraint firstItem="dOY-8V-gNd" firstAttribute="trailing" secondItem="8bC-Xf-vdC" secondAttribute="trailing" id="Vt2-i2-XRH"/>
+                            <constraint firstItem="dOY-8V-gNd" firstAttribute="top" secondItem="OUC-1X-0NI" secondAttribute="bottom" id="drq-yP-dR1"/>
                             <constraint firstItem="dOY-8V-gNd" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="etC-vQ-DtY"/>
                         </constraints>
-                        <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
                     <navigationItem key="navigationItem" id="nmC-UA-uJi"/>
                     <connections>
@@ -421,4 +422,9 @@
             <point key="canvasLocation" x="140.57971014492756" y="124.55357142857142"/>
         </scene>
     </scenes>
+    <resources>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+    </resources>
 </document>

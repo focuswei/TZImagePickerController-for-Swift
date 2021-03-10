@@ -146,7 +146,7 @@ class TZPhotoPreviewController: UIViewController,UICollectionViewDataSource,UICo
             collectionView.reloadData()
         }
         
-        let toolBarHeight: CGFloat = TZCommonTools.tz_isIPhoneX() ? 44+(83-49):44
+        let toolBarHeight: CGFloat = 44 + TZCommonTools.tz_safeAreaInsets().bottom
         let toolBarTop: CGFloat = self.view.tz_height - toolBarHeight
         toolBar.frame = CGRect(x: 0, y: toolBarTop, width: self.view.tz_width, height: toolBarHeight)
         if tzImagePickerVc.allowPickingOriginalPhoto {
@@ -190,6 +190,10 @@ class TZPhotoPreviewController: UIViewController,UICollectionViewDataSource,UICo
         
         if tzImagePickerVc?.allowPickingMultipleVideo == true && model.type == .TZAssetModelMediaTypeVideo {
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "TZVideoPreviewCell", for: indexPath) as? TZVideoPreviewCell else { fatalError() }
+            cell.iCloudSyncFailedHandle = { [weak self] (asset, isSyncFailed) in
+                model.iCloudFailed = isSyncFailed
+                self?.didICloudSyncStatusChanged(model: model)
+            }
             cell.model = model
             cell.singleTapGestureClosure = { [weak self] in
                 self?.didTapPreviewCell()
@@ -349,6 +353,10 @@ class TZPhotoPreviewController: UIViewController,UICollectionViewDataSource,UICo
         collectionView.register(TZPhotoPreviewCell.self, forCellWithReuseIdentifier: "TZPhotoPreviewCell")
         collectionView.register(TZVideoPreviewCell.self, forCellWithReuseIdentifier: "TZVideoPreviewCell")
         collectionView.register(TZGifPreviewCell.self, forCellWithReuseIdentifier: "TZGifPreviewCell")
+        if let _tzImagePickerVc = self.navigationController as? TZImagePickerController,
+           _tzImagePickerVc.scaleAspectFillCrop && _tzImagePickerVc.allowCrop {
+            collectionView.isScrollEnabled = false
+        }
     }
     
     private func configCropView() {
@@ -556,6 +564,8 @@ class TZPhotoPreviewController: UIViewController,UICollectionViewDataSource,UICo
             originalPhotoLabel.isHidden = true
             doneButton.isHidden = true
         }
+        self.didICloudSyncStatusChanged(model: model)
+        
     }
     
     private func refreshSelectButtonImageViewContentMode() {
@@ -566,6 +576,24 @@ class TZPhotoPreviewController: UIViewController,UICollectionViewDataSource,UICo
                 self.selectButton.imageView?.contentMode = .scaleAspectFit
             }
         }
+    }
+    
+    private func didICloudSyncStatusChanged(model: TZAssetModel) {
+        DispatchQueue.main.async {
+            if let _tzImagePickerVc = self.navigationController as? TZImagePickerController, _tzImagePickerVc.onlyReturnAsset == false {
+                let currentModel = self.models[self.currentIndex]
+                if _tzImagePickerVc.selectedModels.count <= 0 {
+                    self.doneButton.isEnabled =
+                        !currentModel.iCloudFailed
+                } else {
+                    self.doneButton.isEnabled = true
+                }
+                self.selectButton.isEnabled = !currentModel.iCloudFailed || _tzImagePickerVc.showSelectBtn
+                self.originalPhotoButton.isHidden = currentModel.iCloudFailed
+                self.originalPhotoLabel.isHidden = currentModel.iCloudFailed
+            }
+        }
+        
     }
     
     @objc func didChangeStatusBarOrientationNotification(_ notification: Notification) -> Void {

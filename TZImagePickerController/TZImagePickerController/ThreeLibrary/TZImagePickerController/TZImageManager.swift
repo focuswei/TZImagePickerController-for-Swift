@@ -389,11 +389,15 @@ final class TZImageManager: NSObject,TZImagePickerControllerDelegate  {
         }
     }
     
-    /// Export video 导出视频 presetName: 预设名字，默认值是AVAssetExportPreset640x480
+    /// Export video 导出视频
     func getVideoOutputPath(with asset: PHAsset, success: ((_ outputPath: String) -> Void)?, failure: ((_ errorMessage: String, _ error: Error?) -> Void)?) {
-        self.getVideoOutputPath(with: asset, presetName: AVAssetExportPreset640x480, success: success, failure: failure)
+        self.getVideoOutputPath(with: asset, presetName: AVAssetExportPresetMediumQuality, success: success, failure: failure)
     }
     func getVideoOutputPath(with asset: PHAsset, presetName: String, success: ((_ outputPath: String) -> Void)?, failure: ((_ errorMessage: String, _ error: Error?) -> Void)?) {
+        if #available(iOS 14.0, *) {
+            self.requestVideoOutputPath(with: asset, presetName: presetName, success: success, failure: failure)
+            return;
+        }
         let options = PHVideoRequestOptions()
         options.version = .original
         options.deliveryMode = .automatic
@@ -405,6 +409,50 @@ final class TZImageManager: NSObject,TZImagePickerControllerDelegate  {
         }
     }
     
+    func getVideoOutputPath() -> String {
+        let formater = DateFormatter()
+        formater.dateFormat = "yyyy-MM-dd-HH:mm:ss-SSS"
+        let outputPath: String = NSHomeDirectory().appendingFormat("/tmp/video-%@.mp4", formater.string(from: Date()))
+        return outputPath
+    }
+    
+    func requestVideoOutputPath(with asset: PHAsset, presetName: String = AVAssetExportPresetMediumQuality, success: ((_ outputPath: String) -> Void)?, failure: ((_ errorMessage: String, _ error: Error?) -> Void)?) {
+        PHImageManager.default().requestExportSession(forVideo: asset, options: self.getVideoRequestOptions(), exportPreset: presetName) { [weak self] (exportSession, info) in
+            let outputPath = self?.getVideoOutputPath() ?? ""
+            exportSession?.outputURL = URL(fileURLWithPath: outputPath)
+            exportSession?.shouldOptimizeForNetworkUse = false
+            exportSession?.outputFileType = .mp4
+            exportSession?.exportAsynchronously(completionHandler: (self?.handleVideoExportResult(session: exportSession, outputPath: outputPath, success: success, failure: failure))!)
+        }
+    }
+    
+    func handleVideoExportResult(session: AVAssetExportSession?, outputPath: String, success: ((_ outputPath: String) -> Void)?, failure: ((_ errorMessage: String, _ error: Error?) -> Void)?) -> (()-> Void) {
+        return {
+            DispatchQueue.main.async {
+                switch session?.status {
+                case .unknown, .waiting, .exporting:
+                    break
+                case .completed:
+                    success?(outputPath)
+                case .failed:
+                    failure?("视频导出失败",session?.error)
+                case .cancelled:
+                    failure?("导出任务已被取消", nil)
+                default:
+                    break
+                }
+            }
+        }
+    }
+    
+    func getVideoRequestOptions() -> PHVideoRequestOptions {
+        let options = PHVideoRequestOptions()
+        options.version = .original
+        options.deliveryMode = .automatic
+        options.isNetworkAccessAllowed = true
+        return options
+    }
+    
     /// Get photo bytes 获得一组照片的大小
     func getPhotosBytes(withArray photos: Array<TZAssetModel>, callback: ((_ totalBytes: String) -> Void)?) {
         if photos.isEmpty {
@@ -413,7 +461,7 @@ final class TZImageManager: NSObject,TZImagePickerControllerDelegate  {
         var dataLength = 0
         var assetCount = 0
         for model in photos {
-            var options = PHImageRequestOptions()
+            let options = PHImageRequestOptions()
             options.resizeMode = .fast
             options.isNetworkAccessAllowed = true
             if model.type == .TZAssetModelMediaTypePhotoGif {
@@ -593,7 +641,7 @@ final class TZImageManager: NSObject,TZImagePickerControllerDelegate  {
             self.isPhotoSelectable(with: asset) == false {
             return nil
         }
-        var timeLength = assettype == .TZAssetModelMediaTypeVideo ? "\(asset.duration)" : ""
+        var timeLength = assettype == .TZAssetModelMediaTypeVideo ? String(format: "%0.0f", asset.duration) : ""
         timeLength = self.getNewTimeFromDurationSecond(duration: Int(timeLength) ?? 0)
         let model = TZAssetModel(asset: asset, type: assettype, timeLength: timeLength)
         return model
@@ -690,7 +738,7 @@ final class TZImageManager: NSObject,TZImagePickerControllerDelegate  {
     }
     
     private func startExportVideo(with videoAsset: AVURLAsset, presetName: String, success: ((_ outputPath: String) -> Void)?, failure: ((_ errorMessage: String, _ error:Error?) -> Void)?) {
-        var presets = AVAssetExportSession.exportPresets(compatibleWith: videoAsset)
+        let presets = AVAssetExportSession.exportPresets(compatibleWith: videoAsset)
         
         if presets.contains(presetName) {
             let session: AVAssetExportSession? = AVAssetExportSession(asset: videoAsset, presetName: presetName)

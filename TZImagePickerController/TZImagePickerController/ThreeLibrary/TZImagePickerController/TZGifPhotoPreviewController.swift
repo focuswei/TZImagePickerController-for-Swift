@@ -73,7 +73,7 @@ class TZGifPhotoPreviewController: UIViewController {
         
         previewView.frame = self.view.bounds
         previewView.scrollView.frame = self.view.bounds
-        let toolBarHeight: CGFloat = TZCommonTools.tz_isIPhoneX() ? 44+(83-49):44
+        let toolBarHeight: CGFloat = 44 + TZCommonTools.tz_safeAreaInsets().bottom
         toolBar.frame = CGRect(x: 0, y: self.view.tz_height - toolBarHeight, width: self.view.tz_width, height: toolBarHeight)
         doneButton.frame = CGRect(x: self.view.tz_width - 44 - 12, y: 0, width: 44, height: 44)
     }

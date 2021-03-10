@@ -11,14 +11,15 @@ import CoreLocation
 import Photos
 import MobileCoreServices
 
-class TZPhotoPickerController: UIViewController, UICollectionViewDataSource,UICollectionViewDelegate,UIImagePickerControllerDelegate,UINavigationControllerDelegate {
+class TZPhotoPickerController: UIViewController, UICollectionViewDataSource,UICollectionViewDelegate,UIImagePickerControllerDelegate,UINavigationControllerDelegate,PHPhotoLibraryChangeObserver {
+    
 
     var isFirstAppear: Bool = false
     var columnNumber: Int = 0
     var model: TZAlbumModel?
     
     private var _models: Array<TZAssetModel> = []
-    private var _bottomToolBar: UIView = UIView.init(frame: .zero)
+    private var _bottomToolBar: UIView?
     private var _previewButton: UIButton = UIButton.init(type: .custom)
     private var _doneButton: UIButton = UIButton.init(type: .custom)
     private var _numberImageView: UIImageView? = UIImageView.init()
@@ -29,6 +30,8 @@ class TZPhotoPickerController: UIViewController, UICollectionViewDataSource,UICo
     
     private var _shouldScrollToBottom: Bool  = true
     private var _showTakePhotoBtn: Bool = true
+    private var isSavingMedia: Bool = false
+    private var isFetchingMedia: Bool = false
     
     private var _offsetItemCount: CGFloat = 0.0
     
@@ -133,7 +136,7 @@ class TZPhotoPickerController: UIViewController, UICollectionViewDataSource,UICo
         let naviBarHeight: CGFloat = self.navigationController?.navigationBar.tz_height ?? 0
         
         let isStatusBarHidden: Bool = TZCommonTools.isStatusBarHidden()
-        let toolBarHeight: CGFloat = TZCommonTools.tz_isIPhoneX() ? 50+(83-49):50
+        let toolBarHeight: CGFloat = 50 + TZCommonTools.tz_safeAreaInsets().bottom
         if self.navigationController?.navigationBar.isTranslucent == true {
             top = naviBarHeight
             if (!isStatusBarHidden) {
@@ -163,7 +166,7 @@ class TZPhotoPickerController: UIViewController, UICollectionViewDataSource,UICo
             let navigationHeight: CGFloat = naviBarHeight + TZCommonTools.tz_statusBarHeight()
             toolBarTop = self.view.tz_height - toolBarHeight - navigationHeight
         }
-        _bottomToolBar.frame = CGRect(x: 0, y: toolBarTop, width: self.view.tz_width, height: toolBarHeight)
+        _bottomToolBar?.frame = CGRect(x: 0, y: toolBarTop, width: self.view.tz_width, height: toolBarHeight)
         
         var previewWidth: CGFloat = tzImagePickerVc.previewBtnTitleStr.boundingRect(with: CGSize(width: CGFloat.greatestFiniteMagnitude, height: CGFloat.greatestFiniteMagnitude), options: NSStringDrawingOptions.usesFontLeading, attributes: [NSAttributedString.Key.font:UIFont.systemFont(ofSize: 16)], context: nil).width + 2
         
@@ -216,8 +219,9 @@ class TZPhotoPickerController: UIViewController, UICollectionViewDataSource,UICo
                     self?.initSubviews()
                 }
             } else {
-                if self._showTakePhotoBtn || self.isFirstAppear,
-                    let asset = self.model?.result {
+                let systemVersion = Float(UIDevice.current.systemVersion) ?? 0
+                if self._showTakePhotoBtn || self.isFirstAppear || systemVersion >= 14.0,
+                let asset = self.model?.result  {
                     TZImageManager.manager.getAssets(from: asset) { [weak self] (models) in
                         self?._models = models
                         self?.initSubviews()
@@ -232,9 +236,10 @@ class TZPhotoPickerController: UIViewController, UICollectionViewDataSource,UICo
     }
     
     func configBottomToolBar() {
-        guard let tzImagePickerVc = self.navigationController as? TZImagePickerController else { return }
+        guard let tzImagePickerVc = self.navigationController as? TZImagePickerController,
+              _bottomToolBar == nil else { return }
         _bottomToolBar = UIView.init(frame: .zero)
-        _bottomToolBar.backgroundColor = .init(red: 253/255.0, green: 253/255.0, blue: 253/255.0, alpha: 1.0)
+        _bottomToolBar?.backgroundColor = .init(red: 253/255.0, green: 253/255.0, blue: 253/255.0, alpha: 1.0)
         _previewButton = UIButton.init(type: .custom)
         _previewButton.addTarget(self, action: #selector(previewButtonClick), for: .touchUpInside)
         _previewButton.titleLabel?.font = UIFont.systemFont(ofSize: 16)
@@ -290,28 +295,42 @@ class TZPhotoPickerController: UIViewController, UICollectionViewDataSource,UICo
         _numberLabel?.text = String(format: "%zd", tzImagePickerVc.selectedModels.count)
         _numberLabel?.isHidden = tzImagePickerVc.selectedModels.isEmpty
         _numberLabel?.backgroundColor = .clear
+        _numberLabel?.isUserInteractionEnabled = true
         
         _divideLine = UIView.init()
         _divideLine.backgroundColor = .init(red: 222/255.0, green: 222/255.0, blue: 222/255.0, alpha: 1.0)
         
-        _bottomToolBar.addSubview(_divideLine)
-        _bottomToolBar.addSubview(_previewButton)
-        _bottomToolBar.addSubview(_doneButton)
-        _bottomToolBar.addSubview(_numberImageView!)
-        _bottomToolBar.addSubview(_numberLabel!)
-        _bottomToolBar.addSubview(_originalPhotoButton)
-        self.view.addSubview(_bottomToolBar)
+        _bottomToolBar?.addSubview(_divideLine)
+        _bottomToolBar?.addSubview(_previewButton)
+        _bottomToolBar?.addSubview(_doneButton)
+        _bottomToolBar?.addSubview(_numberImageView!)
+        _bottomToolBar?.addSubview(_numberLabel!)
+        _bottomToolBar?.addSubview(_originalPhotoButton)
+        if _bottomToolBar != nil {
+            view.addSubview(_bottomToolBar!)
+        }
         _originalPhotoButton.addSubview(_originalPhotoLabel)
         
     }
     
     func configCollectionView() {
-        collectionView = TZCollectionView.init(frame: .zero, collectionViewLayout: layout)
-        collectionView?.backgroundColor = .white
-        collectionView?.dataSource = self
-        collectionView?.delegate = self
-        collectionView?.alwaysBounceHorizontal = false
-        collectionView?.contentInset = UIEdgeInsets(top: itemMargin, left: itemMargin, bottom: itemMargin, right: itemMargin)
+        if collectionView == nil {
+            collectionView = TZCollectionView.init(frame: .zero, collectionViewLayout: layout)
+            if #available(iOS 13.0, *) {
+                collectionView?.backgroundColor = .tertiarySystemBackground
+            } else {
+                collectionView?.backgroundColor = .white
+            }
+            collectionView?.dataSource = self
+            collectionView?.delegate = self
+            collectionView?.alwaysBounceHorizontal = false
+            collectionView?.contentInset = UIEdgeInsets(top: itemMargin, left: itemMargin, bottom: itemMargin, right: itemMargin)
+            view.addSubview(collectionView!)
+            collectionView?.register(TZAssetCell.self, forCellWithReuseIdentifier: "TZAssetCell")
+            collectionView?.register(TZAssetCameraCell.self, forCellWithReuseIdentifier: "TZAssetCameraCell")
+        } else {
+            collectionView?.reloadData()
+        }
         
         if _showTakePhotoBtn {
             collectionView?.contentSize = CGSize(width: self.view.tz_width, height: CGFloat((_models.count + self.columnNumber) / self.columnNumber) * self.view.tz_width)
@@ -324,11 +343,13 @@ class TZPhotoPickerController: UIViewController, UICollectionViewDataSource,UICo
                 noDataLabel?.textColor = UIColor.noDataLabelTextColor
                 noDataLabel?.font = UIFont.boldSystemFont(ofSize: 20)
                 collectionView?.addSubview(noDataLabel!)
+            } else {
+                noDataLabel?.removeFromSuperview()
+                noDataLabel = nil
             }
         }
-        self.view.addSubview(collectionView!)
-        collectionView?.register(TZAssetCell.self, forCellWithReuseIdentifier: "TZAssetCell")
-        collectionView?.register(TZAssetCameraCell.self, forCellWithReuseIdentifier: "TZAssetCameraCell")
+        
+        
     }
     
     func pushPhotoPrevireViewController(photoPreviewVc: TZPhotoPreviewController, _ needCheckSelectedModels: Bool) {
@@ -412,6 +433,8 @@ class TZPhotoPickerController: UIViewController, UICollectionViewDataSource,UICo
         }
         
         tzImagePickerVc.showProgressHUD()
+        _doneButton.isEnabled = false
+        isFetchingMedia = true
         var assets: [PHAsset] = []
         var photos: [UIImage] = []
         var infoArr: [[AnyHashable:Any]] = []
@@ -537,6 +560,8 @@ class TZPhotoPickerController: UIViewController, UICollectionViewDataSource,UICo
         
         guard let tzImagePickerVc = self.navigationController as? TZImagePickerController else { return }
         tzImagePickerVc.hideProgressHUD()
+        _doneButton.isEnabled = true
+        isFetchingMedia = false
         if tzImagePickerVc.autoDismiss {
             self.navigationController?.dismiss(animated: true, completion: {
                 self.callDelegateMethodWithPhotos(photos: photos, asset: asset, infoArr: infoArr)
@@ -667,7 +692,9 @@ class TZPhotoPickerController: UIViewController, UICollectionViewDataSource,UICo
         if type == "public.image" {
             tzImagePickerVc.showProgressHUD()
             if let photo: UIImage = info[UIImagePickerController.InfoKey.originalImage] as? UIImage {
+                isSavingMedia = true
                 TZImageManager.manager.savePhoto(with: photo, location: self.location) { [weak self](asset, error) in
+                    self?.isSavingMedia = false
                     if error == nil {
                         self?.addPHAsset(asset: asset)
                     }
@@ -677,9 +704,15 @@ class TZPhotoPickerController: UIViewController, UICollectionViewDataSource,UICo
         } else if (type == "public.movie") {
             tzImagePickerVc.showProgressHUD()
             if let videoUrl = info[UIImagePickerController.InfoKey.mediaURL] as? URL {
+                isSavingMedia = true
                 TZImageManager.manager.saveVideo(with: videoUrl) { [weak self](asset, error) in
-                    if error == nil {
+                    self?.isSavingMedia = false
+                    if error == nil && asset != nil {
                         self?.addPHAsset(asset: asset)
+                    } else {
+                        if let tzImagePickerVc = self?.navigationController as? TZImagePickerController {
+                            tzImagePickerVc.hideProgressHUD()
+                        }
                     }
                 }
                 self.location = nil;
@@ -833,6 +866,17 @@ class TZPhotoPickerController: UIViewController, UICollectionViewDataSource,UICo
     }
     override var prefersStatusBarHidden: Bool {
         return false
+    }
+    
+    //MARK: ** PHPhotoLibraryChangeObserver **
+    func photoLibraryDidChange(_ changeInstance: PHChange) {
+        if isSavingMedia || isFetchingMedia {
+            return
+        }
+        DispatchQueue.main.async {
+            self.model?.refreshFetchResult()
+            self.fetchAssetModels()
+        }
     }
     @objc func didChangeStatusBarOrientationNotification(noti: Notification) -> Void {
         _offsetItemCount = (collectionView?.contentOffset.y ?? 0.0) / (layout.itemSize.height + layout.minimumLineSpacing)

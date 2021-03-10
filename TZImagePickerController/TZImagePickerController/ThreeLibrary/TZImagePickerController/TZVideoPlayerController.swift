@@ -8,6 +8,7 @@
 
 import UIKit
 import MediaPlayer
+import Photos
 
 class TZVideoPlayerController: UIViewController {
 
@@ -23,6 +24,20 @@ class TZVideoPlayerController: UIViewController {
     private var originStatusBarStyle: UIStatusBarStyle = .default
     
     private var needShowStatusBar: Bool = TZCommonTools.isStatusBarHidden()
+    
+    private lazy var iCloudErrorView: UIView = {
+        let _iCloudErrorView = UIView(frame: CGRect(x: 0, y: TZCommonTools.tz_statusBarHeight() + 44 + 10, width: view.tz_width, height: 28))
+        let icloud: UIImageView = UIImageView.init(image: UIImage.tz_imageNamedFromMyBundle(name: "iCloudError"))
+        icloud.frame = CGRect(x: 20, y: 0, width: 28, height: 28)
+        _iCloudErrorView.addSubview(icloud)
+        let label = UILabel.init(frame: CGRect(x: 53, y: 0, width: view.tz_width - 63, height: 28))
+        label.font = UIFont.systemFont(ofSize: 10)
+        label.text = Bundle.tz_localizedString(for: "iCloud sync failed")
+        _iCloudErrorView.addSubview(label)
+        view.addSubview(_iCloudErrorView)
+        _iCloudErrorView.isHidden = true
+        return _iCloudErrorView
+    }()
     
     
     override func viewDidLoad() {
@@ -52,7 +67,7 @@ class TZVideoPlayerController: UIViewController {
         let statusBarHeight = TZCommonTools.tz_statusBarHeight()
         let statusBarAndNaviBarHeight = statusBarHeight + (self.navigationController?.navigationBar.tz_height ?? 0.0)
         playerLayer?.frame = self.view.bounds
-        let toolBarHeight: CGFloat = TZCommonTools.tz_isIPhoneX() ? 44+(83-49):44
+        let toolBarHeight: CGFloat = TZCommonTools.tz_safeAreaInsets().bottom + 44
         toolBar.frame = CGRect(x: 0, y: self.view.tz_height - toolBarHeight, width: self.view.tz_width, height: toolBarHeight)
         doneButton.frame = CGRect(x: self.view.tz_width-44-12, y: 0, width: 44, height: 44)
         playButton.frame = CGRect(x: 0, y: statusBarAndNaviBarHeight, width: self.view.tz_width, height: self.view.tz_height - statusBarAndNaviBarHeight - toolBarHeight)
@@ -63,6 +78,8 @@ class TZVideoPlayerController: UIViewController {
     func configMoviePlayer() {
         if let asset = model?.asset {
             TZImageManager.manager.getPhoto(with: asset) { [weak self] (photo, info, isDegraded) in
+                let iCloudSyncFailed: Bool = TZCommonTools.isICloudSync(error: info?[PHImageErrorKey] as? NSError)
+                self?.iCloudErrorView.isHidden = !iCloudSyncFailed
                 if isDegraded {
                     self?.cover = photo
                     self?.doneButton.isEnabled = true
@@ -142,6 +159,7 @@ class TZVideoPlayerController: UIViewController {
         let currentTime: CMTime? = player?.currentItem?.currentTime()
         let durationTime: CMTime? = player?.currentItem?.duration
         if player?.rate == 0.0 {
+            NotificationCenter.default.post(name: NSNotification.Name.init("TZ_VIDEO_PLAY_NOTIFICATION"), object: player)
             if currentTime?.value == durationTime?.value {
                 player?.currentItem?.seek(to: CMTime(value: 0, timescale: 1))
             }

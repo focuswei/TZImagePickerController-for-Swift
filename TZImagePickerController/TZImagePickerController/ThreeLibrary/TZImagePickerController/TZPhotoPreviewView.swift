@@ -16,6 +16,9 @@ class TZPhotoPreviewView: UIView,UIScrollViewDelegate {
     var scrollView: UIScrollView
     var imageContainerView: UIView
     var progressView: TZProgressView?
+    var iCloudErrorIcon: UIImageView?
+    var iCloudErrorLabel: UILabel?
+    var iCloudSyncFailedHandle: ((_ asset: PHAsset, _ isSyncFailed: Bool) -> Void)?
     var allowCrop: Bool = false {
         didSet {
             if let _asset = self.asset {
@@ -255,6 +258,8 @@ class TZPhotoPreviewView: UIView,UIScrollViewDelegate {
         let progressX = (self.tz_width - progressWH) / 2
         let progressY = (self.tz_height - progressWH) / 2
         progressView?.frame = CGRect.init(x: progressX, y: progressY, width: progressWH, height: progressWH)
+        iCloudErrorIcon?.frame = CGRect(x: 20, y: TZCommonTools.tz_statusBarHeight() + 44 + 10, width: 28, height: 28);
+        iCloudErrorLabel?.frame = CGRect(x: 53, y: TZCommonTools.tz_statusBarHeight() + 44 + 10, width: self.tz_width - 63, height: 28)
         
         self.recoverSubviews()
     }

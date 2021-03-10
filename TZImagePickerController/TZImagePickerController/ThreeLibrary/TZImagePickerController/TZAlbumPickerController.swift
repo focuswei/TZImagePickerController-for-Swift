@@ -7,8 +7,9 @@
 //
 
 import UIKit
+import Photos
 
-class TZAlbumPickerController: UIViewController,UITableViewDataSource,UITableViewDelegate {
+class TZAlbumPickerController: UIViewController,UITableViewDataSource,UITableViewDelegate, PHPhotoLibraryChangeObserver {
 
     var columnNumber: Int = 0
     var isFirstAppear: Bool = false
@@ -24,9 +25,13 @@ class TZAlbumPickerController: UIViewController,UITableViewDataSource,UITableVie
     }
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        PHPhotoLibrary.shared().register(self)
         self.isFirstAppear = true
-        self.view.backgroundColor = UIColor.white
+        if #available(iOS 13.0, *) {
+            view.backgroundColor = .tertiarySystemBackground
+        } else {
+            view.backgroundColor = UIColor.white
+        }
         if let imagePickerVc = self.navigationController as? TZImagePickerController {
             let cancelButton = UIBarButtonItem.init(title: imagePickerVc.cancelBtnTitleStr, style: .plain, target: imagePickerVc, action: #selector(imagePickerVc.cancelButtonClick))
             TZCommonTools.configBarButtonItem(cancelButton, imagePickerVc)
@@ -125,6 +130,13 @@ class TZAlbumPickerController: UIViewController,UITableViewDataSource,UITableVie
             tableViewHeight = self.view.tz_height
         }
         self.tableView?.frame = CGRect(x: 0, y: top, width: self.view.tz_width, height: tableViewHeight)
+    }
+    
+    //MARK: ** PHPhotoLibraryChangeObserver **
+    func photoLibraryDidChange(_ changeInstance: PHChange) {
+        DispatchQueue.main.async {
+            self.configTableView()
+        }
     }
 
     //MARK: TableViewDelegate

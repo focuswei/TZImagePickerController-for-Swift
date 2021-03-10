@@ -23,6 +23,7 @@ class TZAssetModel: NSObject {
     
     var type: TZAssetModelMediaType
     var timeLength: String?
+    var iCloudFailed: Bool = false
     
     init(asset: PHAsset, type: TZAssetModelMediaType, timeLength: String?) {
         self.timeLength = timeLength
@@ -50,6 +51,8 @@ class TZAlbumModel: NSObject {
     var name: String = ""
     var count: Int = 0
     var result: PHFetchResult<PHAsset>
+    var collection: PHAssetCollection?
+    var options: PHFetchOptions?
     
     var models: [TZAssetModel]?
     var selectedModels: Array<TZAssetModel> = [] {
@@ -81,6 +84,7 @@ class TZAlbumModel: NSObject {
         super.init()
         self.setFetchResult(result: phresult, needFetchAssets: needFetchAssets)
         self.name = name
+        self.count = phresult.count
         self.isCameraRoll = isCameraRoll
         self.count = result.count
     }
@@ -99,5 +103,14 @@ class TZAlbumModel: NSObject {
                 self.selectedCount += 1
             }
         })
+    }
+    
+    func refreshFetchResult() {
+        if let collection = self.collection,
+           let options = self.options {
+            let fetchResult = PHAsset.fetchAssets(in: collection, options: options)
+            self.count = fetchResult.count
+            result = fetchResult
+        }
     }
 }

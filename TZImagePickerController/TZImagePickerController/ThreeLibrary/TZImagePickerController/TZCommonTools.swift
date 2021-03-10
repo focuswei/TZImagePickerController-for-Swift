@@ -9,6 +9,15 @@
 import UIKit
 
 class TZCommonTools {
+    
+    static func tz_safeAreaInsets() -> UIEdgeInsets {
+        if #available(iOS 11.0, *),
+           let window = TZCommonTools.getKeyWindow() {
+            return window.safeAreaInsets
+        }
+        return .zero
+    }
+    
     static func tz_isIPhoneX() -> Bool {
         var size = UIScreen.main.bounds.size
         if size.height < size.width {
@@ -73,7 +82,11 @@ class TZCommonTools {
     
     static func tz_statusBarHeight() -> CGFloat {
         //不能用statusBarFrame的原因：If the status bar is hidden, the value of this property is CGRectZero.
-        return self.tz_isIPhoneX() ? 44:20
+        if #available(iOS 11.0, *),
+           let top = TZCommonTools.getKeyWindow()?.safeAreaInsets.top {
+            return top
+        }
+        return 20
     }
     
     static func configBarButtonItem(_ item: UIBarButtonItem, _ tzImagePickerVc: TZImagePickerController) {
@@ -82,6 +95,14 @@ class TZCommonTools {
         textAttrs[NSAttributedString.Key.foregroundColor] = tzImagePickerVc.barItemTextColor
         textAttrs[NSAttributedString.Key.font] = tzImagePickerVc.barItemTextFont
         item.setTitleTextAttributes(textAttrs, for: .normal)
+    }
+    
+    static func isICloudSync(error: NSError?) -> Bool {
+        if let domain = error?.domain,
+           domain == "CKErrorDomain" || domain == "CloudPhotoLibraryErrorDomain" {
+            return true
+        }
+        return false
     }
 }
 

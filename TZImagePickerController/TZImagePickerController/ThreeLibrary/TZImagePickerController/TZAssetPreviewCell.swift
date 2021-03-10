@@ -8,6 +8,7 @@
 
 import UIKit
 import MediaPlayer
+import Photos
 
 class TZAssetPreviewCell: UICollectionViewCell {
     
@@ -81,7 +82,7 @@ class TZPhotoPreviewCell: TZAssetPreviewCell {
             
         }
         
-        self.addSubview(self.previewView!)
+        contentView.addSubview(self.previewView!)
     }
     
     func recoverSubviews() {
@@ -100,11 +101,21 @@ class TZVideoPreviewCell: TZAssetPreviewCell {
     var playerLayer: AVPlayerLayer?
     var playButton: UIButton?
     var cover: UIImage?
+    var iCloudErrorIcon: UIImageView?
+    var iCloudErrorLabel: UILabel?
+    var iCloudSyncFailedHandle: ((_ asset: PHAsset, _ isSyncFailed: Bool) -> Void)?
     override var model: TZAssetModel? {
         didSet {
             self.configMoviePlayer()
         }
     }
+    
+    var videoURL: URL? {
+        didSet {
+            self.configMoviePlayer()
+        }
+    }
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
     }
@@ -123,6 +134,14 @@ class TZVideoPreviewCell: TZAssetPreviewCell {
     
     override func configSubviews() {
         NotificationCenter.default.addObserver(self, selector: #selector(pausePlayerAndShowNaviBar), name: UIApplication.willResignActiveNotification, object: nil)
+        iCloudErrorIcon = UIImageView()
+        iCloudErrorIcon?.image = UIImage.tz_imageNamedFromMyBundle(name: "iCloudError")
+        iCloudErrorIcon?.isHidden = true
+        iCloudErrorLabel = UILabel()
+        iCloudErrorLabel?.font = UIFont.systemFont(ofSize: 10)
+        iCloudErrorLabel?.textColor = UIColor.white
+        iCloudErrorLabel?.text = Bundle.tz_localizedString(for: "iCloud sync failed")
+        iCloudErrorLabel?.isHidden = true
     }
     
     func configMoviePlayer() {
@@ -135,25 +154,27 @@ class TZVideoPreviewCell: TZAssetPreviewCell {
         
         if let asset = self.model?.asset {
             TZImageManager.manager.getPhoto(with: asset) { [weak self] (photo, omfp, isDegraded) in
+                
+                let error = omfp?[PHImageErrorKey] as? NSError
+                let iCloudSyncFailed: Bool = TZCommonTools.isICloudSync(error: error)
+                self?.iCloudErrorLabel?.isHidden = !iCloudSyncFailed
+                self?.iCloudErrorIcon?.isHidden = !iCloudSyncFailed
+                self?.iCloudSyncFailedHandle?(asset, iCloudSyncFailed)
                 self?.cover = photo
             }
             
             TZImageManager.manager.getVideo(with: asset) { [weak self] (playerItem, info) in
                 DispatchQueue.main.async {
-                    if let strongSelf = self {
-                        strongSelf.player = AVPlayer.init(playerItem: playerItem)
-                        strongSelf.playerLayer = AVPlayerLayer.init(player: strongSelf.player)
-                        strongSelf.playerLayer?.backgroundColor = UIColor.black.cgColor
-                        strongSelf.playerLayer?.frame = self?.bounds ?? CGRect.zero
-                        if let layer = self?.playerLayer {
-                            strongSelf.layer.addSublayer(layer)
-                        }
-                        strongSelf.configPlayButton()
-                        
-                        NotificationCenter.default.addObserver(strongSelf, selector: #selector(self?.pausePlayerAndShowNaviBar), name: NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: self?.player?.currentItem)
+                    if let strongSelf = self,
+                       let item = playerItem {
+                        strongSelf.configPlayer(with: item)
                     }
-                    
                 }
+            }
+        } else {
+            if let url = self.videoURL {
+                let playerItem = AVPlayerItem.init(url: url)
+                configPlayer(with: playerItem)
             }
         }
         
@@ -166,13 +187,34 @@ class TZVideoPreviewCell: TZAssetPreviewCell {
         playButton = UIButton.init(type: .custom)
         playButton?.setImage(UIImage.tz_imageNamedFromMyBundle(name: "MMVideoPreviewPlay"), for: .normal)
         playButton?.setImage(UIImage.tz_imageNamedFromMyBundle(name: "MMVideoPreviewPlayHL"), for: .highlighted)
-        self.addSubview(playButton!)
+        contentView.addSubview(playButton!)
+        if iCloudErrorIcon != nil {
+            contentView.addSubview(iCloudErrorIcon!)
+        }
+        if iCloudErrorLabel != nil {
+            contentView.addSubview(iCloudErrorLabel!)
+        }
+    }
+    
+    func configPlayer(with playerItem: AVPlayerItem) {
+        self.player = AVPlayer.init(playerItem: playerItem)
+        self.playerLayer = AVPlayerLayer.init(player: self.player)
+        self.playerLayer?.backgroundColor = UIColor.black.cgColor
+        self.playerLayer?.frame = self.bounds
+        if let layer = self.playerLayer {
+            contentView.layer.addSublayer(layer)
+        }
+        self.configPlayButton()
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(self.pausePlayerAndShowNaviBar), name: NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: self.player?.currentItem)
     }
     
     override func layoutSubviews() {
         super.layoutSubviews()
         playerLayer?.frame = self.bounds
         playButton?.frame = CGRect(x: 0, y: 64, width: self.tz_width, height: self.tz_height - 64 - 44)
+        iCloudErrorIcon?.frame = CGRect(x: 20, y: TZCommonTools.tz_statusBarHeight() + 44 + 10, width: 28, height: 28);
+        iCloudErrorLabel?.frame = CGRect(x: 53, y: TZCommonTools.tz_statusBarHeight() + 44 + 10, width: self.tz_width - 63, height: 28)
     }
     
     func photoPreviewCollectionViewDidScroll() {
@@ -184,6 +226,7 @@ class TZVideoPreviewCell: TZAssetPreviewCell {
         let currentTime: CMTime = player?.currentItem?.currentTime() ?? CMTime()
         let durationTime: CMTime = player?.currentItem?.duration ?? CMTime()
         if player?.rate == 0.0 {
+            NotificationCenter.default.post(name: NSNotification.Name.init("TZ_VIDEO_PLAY_NOTIFICATION"), object: player)
             if currentTime.value == durationTime.value {
                 player?.currentItem?.seek(to: CMTime(value: 0, timescale: 1), completionHandler: nil)
             }
@@ -217,7 +260,7 @@ class TZGifPreviewCell: TZAssetPreviewCell {
         previewView.singleTapGestureClosure = { [weak self] in
             self?.singleTapGestureClosure?()
         }
-        self.addSubview(previewView)
+        contentView.addSubview(previewView)
     }
     
     override init(frame: CGRect) {
