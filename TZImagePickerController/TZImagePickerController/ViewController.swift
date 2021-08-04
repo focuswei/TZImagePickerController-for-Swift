@@ -519,7 +519,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     extension ViewController: TZImagePickerControllerDelegate {
         /// User click cancel button
         /// 取消
-        func tz_imagePickerControllerDidCancel(_ picker: TZImagePickerController) {
+        func tz_imagePickerControllerDidCancel(picker: TZImagePickerController) {
             print("取消")
         }
         

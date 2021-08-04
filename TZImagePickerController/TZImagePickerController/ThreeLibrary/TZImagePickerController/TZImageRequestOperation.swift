@@ -111,6 +111,6 @@ class TZImageRequestOperation: Operation {
     }
     
     deinit {
-        print("\(self) free")
+        
     }
 }

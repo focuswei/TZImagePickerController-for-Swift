@@ -34,7 +34,7 @@ extension UIColor {
         let rgb: CGFloat = 34/255.0
         return UIColor.init(red: rgb, green: rgb, blue: rgb, alpha: 0.7)
     }
-    static var iconThemeColor :        UIColor { return UIColor.init(red: 31/255.0, green: 185/255.0, blue: 34/255.0, alpha: 1.0) }
-    static var doneButtonTitleColor :      UIColor { return UIColor.init(red: 31/255.0, green: 185/255.0, blue: 34/255.0, alpha: 1.0) }
+    static var iconThemeColor :        UIColor { return UIColor.init(hexColor: 0xA22C5F) }
+    static var doneButtonTitleColor :      UIColor { return UIColor.init(hexColor: 0x444344) }
 
 }

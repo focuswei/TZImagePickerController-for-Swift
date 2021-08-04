@@ -31,11 +31,7 @@ class TZPhotoPreviewController: UIViewController,UICollectionViewDataSource,UICo
         }
     }
     ///< If YES,return original photo / 是否返回原图，默认是false
-    var isSelectOriginalPhoto: Bool = false {
-        didSet {
-            didSetIsSelectOriginalPhoto = true
-        }
-    }
+    var isSelectOriginalPhoto: Bool = true
     var isCropImage: Bool = false
     
     /// Return the new selected photos / 返回最新的选中图片数组
@@ -56,13 +52,9 @@ class TZPhotoPreviewController: UIViewController,UICollectionViewDataSource,UICo
     
     private var toolBar: UIView = UIView.init(frame: .zero)
     private var doneButton: UIButton = UIButton.init(type: .custom)
-    private var numberImageView: UIImageView = UIImageView.init()
-    private var numberLabel: UILabel = UILabel.init(frame: .zero)
-    private var originalPhotoButton: UIButton = UIButton.init(type: .custom)
-    private var originalPhotoLabel: UILabel = UILabel.init(frame: .zero)
     private var offsetItemCount: CGFloat = 0
     
-    private var didSetIsSelectOriginalPhoto: Bool = false
+    private var didSetIsSelectOriginalPhoto: Bool = true
     
     private var isHideNavibar: Bool = false
     private var cropBgView: UIView = UIView.init(frame: .zero)
@@ -129,8 +121,8 @@ class TZPhotoPreviewController: UIViewController,UICollectionViewDataSource,UICo
         let statusBarHeightInterval: CGFloat = isFullScreen ? statusBarHeight - 20:0
         let naviBarHeight = statusBarHeight + tzImagePickerVc.navigationBar.tz_height
         naviBar.frame = CGRect(x: 0, y: 0, width: self.view.tz_width, height: naviBarHeight)
-        backButton.frame = CGRect(x: 10, y: 10 + statusBarHeightInterval, width: 44, height: 44)
-        selectButton.frame = CGRect(x: self.view.tz_width - 56, y: 10 + statusBarHeightInterval, width: 44, height: 44)
+        backButton.frame = CGRect(x: 10, y: 22 + statusBarHeightInterval, width: 44, height: 44)
+        selectButton.frame = CGRect(x: self.view.tz_width - 30 - 30, y: 14 + statusBarHeightInterval, width: 60, height: 60)
         indexLabel.frame = selectButton.frame
         
         layout.itemSize = CGSize(width: self.view.tz_width + 20, height: self.view.tz_height)
@@ -149,16 +141,9 @@ class TZPhotoPreviewController: UIViewController,UICollectionViewDataSource,UICo
         let toolBarHeight: CGFloat = 44 + TZCommonTools.tz_safeAreaInsets().bottom
         let toolBarTop: CGFloat = self.view.tz_height - toolBarHeight
         toolBar.frame = CGRect(x: 0, y: toolBarTop, width: self.view.tz_width, height: toolBarHeight)
-        if tzImagePickerVc.allowPickingOriginalPhoto {
-            let fullImageWidth: CGFloat = tzImagePickerVc.fullImageBtnTitleStr.boundingRect(with: CGSize(width: CGFloat.greatestFiniteMagnitude, height: CGFloat.greatestFiniteMagnitude), options: NSStringDrawingOptions.usesFontLeading, attributes: [NSAttributedString.Key.font:UIFont.systemFont(ofSize: 13)], context: nil).width
-            originalPhotoButton.frame = CGRect(x: 0, y: 0, width: fullImageWidth+55, height: 44)
-            originalPhotoLabel.frame = CGRect(x:fullImageWidth + 42, y:0, width:80, height:44)
-        }
         
-        doneButton.sizeToFit()
-        doneButton.frame = CGRect(x: self.view.tz_width - doneButton.tz_width - 12, y: 0, width: doneButton.tz_width, height: 44)
-        numberImageView.frame = CGRect(x: doneButton.tz_left - 24 - 5, y: 10, width: 24, height: 24)
-        numberLabel.frame = numberImageView.frame
+        
+        doneButton.frame = CGRect(x: self.view.tz_width - 70 - 12, y: 10, width: 70, height: toolBarHeight - 20)
         
         self.configCropView()
         
@@ -215,7 +200,6 @@ class TZPhotoPreviewController: UIViewController,UICollectionViewDataSource,UICo
                 self?.progress = progress
                 if progress >= 1 {
                     if self?.isSelectOriginalPhoto == true {
-                        self?.showPhotoBytes()
                     }
                     if self?.alertView != nil && self?.collectionView.visibleCells.contains(cell!) == true {
                         tzImagePickerVc?.hideAlertView(alertView: self?.alertView)
@@ -263,7 +247,6 @@ class TZPhotoPreviewController: UIViewController,UICollectionViewDataSource,UICo
         selectButton = UIButton.init(frame: .zero)
         selectButton.setImage(tzImagePickerVc.photoDefImage, for: .normal)
         selectButton.setImage(tzImagePickerVc.photoSelImage, for: .selected)
-        selectButton.imageEdgeInsets = UIEdgeInsets(top: 10, left: 0, bottom: 10, right: 0)
         selectButton.imageView?.contentMode = .scaleAspectFit
         selectButton.addTarget(self, action: #selector(selectButtonClick(_:)), for: .touchUpInside)
         selectButton.isHidden = !tzImagePickerVc.showSelectBtn
@@ -284,55 +267,20 @@ class TZPhotoPreviewController: UIViewController,UICollectionViewDataSource,UICo
         toolBar.backgroundColor = UIColor.toolBarBgColor
         guard let tzImagePickerVc = self.navigationController as? TZImagePickerController else { return }
         
-        if tzImagePickerVc.allowPickingOriginalPhoto {
-            let leftInset: CGFloat = TZCommonTools.tz_isRightToLeftLayout() ? 10:-10
-            originalPhotoButton.imageEdgeInsets = UIEdgeInsets(top: 0, left: leftInset, bottom: 0, right: 0)
-            originalPhotoButton.backgroundColor = .clear
-            originalPhotoButton.addTarget(self, action: #selector(originalPhotoButtonClick(_:)), for: .touchUpInside)
-            originalPhotoButton.titleLabel?.font = UIFont.systemFont(ofSize: 13.0)
-            originalPhotoButton.setTitle(tzImagePickerVc.fullImageBtnTitleStr, for: .normal)
-            originalPhotoButton.setTitle(tzImagePickerVc.fullImageBtnTitleStr, for: .selected)
-            originalPhotoButton.setTitleColor(.lightGray, for: .normal)
-            originalPhotoButton.setTitleColor(.white, for: .selected)
-            originalPhotoButton.setImage(tzImagePickerVc.photoPreviewOriginDefImage, for: .normal)
-            originalPhotoButton.setImage(tzImagePickerVc.photoOriginSelImage, for: .selected)
-            
-            originalPhotoLabel = UILabel.init(frame: .zero)
-            originalPhotoLabel.textAlignment = .left
-            originalPhotoLabel.font = UIFont.systemFont(ofSize: 13.0)
-            originalPhotoLabel.textColor = .white
-            originalPhotoLabel.backgroundColor = .clear
-            if isSelectOriginalPhoto {
-                self.showPhotoBytes()
-            }
-            toolBar.addSubview(originalPhotoLabel)
-            toolBar.addSubview(originalPhotoButton)
-        }
-        
         doneButton = UIButton.init(type: .custom)
-        doneButton.titleLabel?.font = UIFont.systemFont(ofSize: 16.0)
+        doneButton.titleLabel?.font = UIFont.systemFont(ofSize: 15)
         doneButton.addTarget(self, action: #selector(doneButtonClick), for: .touchUpInside)
         doneButton.setTitle(tzImagePickerVc.doneBtnTitleStr, for: .normal)
-        doneButton.setTitleColor(tzImagePickerVc.oKButtonTitleColorNormal, for: .normal)
-        
-        numberImageView = UIImageView.init(image: tzImagePickerVc.photoNumberIconImage)
-        numberImageView.backgroundColor = .clear
-        numberImageView.clipsToBounds = true
-        numberImageView.contentMode = .scaleAspectFit
-        numberImageView.isHidden = tzImagePickerVc.selectedModels.count <= 0
-        
-        
-        numberLabel.font = UIFont.systemFont(ofSize: 15.0)
-        numberLabel.textColor = .white
-        numberLabel.textAlignment = .center
-        numberLabel.text = String(format: "%zd", tzImagePickerVc.selectedModels.count)
-        numberLabel.isHidden = tzImagePickerVc.selectedModels.count <= 0
-        numberLabel.backgroundColor = .clear
-        
+        doneButton.setTitle(tzImagePickerVc.doneBtnTitleStr, for: .disabled)
+        doneButton.setTitleColor(UIColor.white, for: .normal)
+        doneButton.setTitleColor(tzImagePickerVc.oKButtonTitleColorDisabled, for: .disabled)
+        doneButton.setBackgroundImage(UIImage.tz_imageNamedFromMyBundle(name: "photo_doneBtnBg_normal"), for: .normal)
+        doneButton.setBackgroundImage(UIImage.tz_imageNamedFromMyBundle(name: "photo_doneBtnBg_disable"), for: .disabled)
+        doneButton.isEnabled = tzImagePickerVc.selectedModels.count > 0 || tzImagePickerVc.alwaysEnableDoneBtn
+        doneButton.layer.cornerRadius = 3
+        doneButton.layer.masksToBounds = true
         
         toolBar.addSubview(doneButton)
-        toolBar.addSubview(numberImageView)
-        toolBar.addSubview(numberLabel)
         self.view.addSubview(toolBar)
         
     }
@@ -426,9 +374,7 @@ class TZPhotoPreviewController: UIViewController,UICollectionViewDataSource,UICo
     @objc func originalPhotoButtonClick(_ sender: UIButton) {
         sender.isSelected = !sender.isSelected
         isSelectOriginalPhoto = sender.isSelected
-        originalPhotoLabel.isHidden = !sender.isSelected
         if (isSelectOriginalPhoto) {
-            self.showPhotoBytes()
             if (!selectButton.isSelected) {
                 // 如果当前已选择照片张数 < 最大可选张数 && 最大可选张数大于1，就选中该张图
                 if let _tzImagePickerVc = self.navigationController as? TZImagePickerController,_tzImagePickerVc.selectedModels.count < _tzImagePickerVc.maxImagesCount && _tzImagePickerVc.showSelectBtn {
@@ -509,13 +455,6 @@ class TZPhotoPreviewController: UIViewController,UICollectionViewDataSource,UICo
         if model.isSelected {
             UIView.showOscillatoryAnimationWith(layer: selectButton.imageView?.layer, type: .TZOscillatoryAnimationToBigger)
         }
-        UIView.showOscillatoryAnimationWith(layer: numberImageView.layer, type: .TZOscillatoryAnimationToSmaller)
-    }
-    
-    private func showPhotoBytes() {
-        TZImageManager.manager.getPhotosBytes(withArray: [models[self.currentIndex]]) { [weak self] (totalBytes) in
-            self?.originalPhotoLabel.text = "(\(totalBytes))"
-        }
     }
     
     
@@ -532,36 +471,12 @@ class TZPhotoPreviewController: UIViewController,UICollectionViewDataSource,UICo
             indexLabel.isHidden = true
         }
         
-        numberLabel.text = String(format: "%zd", tzImagePickerVc.selectedModels.count)
-        numberImageView.isHidden = tzImagePickerVc.selectedModels.count <= 0 || isHideNavibar || isCropImage
-        numberLabel.isHidden = tzImagePickerVc.selectedModels.count <= 0 || isHideNavibar || isCropImage
-        
-        originalPhotoButton.isSelected = isSelectOriginalPhoto
-        originalPhotoLabel.isHidden = !originalPhotoButton.isSelected
-        if isSelectOriginalPhoto {
-            self.showPhotoBytes()
-        }
-        
-        if !isHideNavibar {
-            if model.type == .TZAssetModelMediaTypeVideo {
-                originalPhotoButton.isHidden = true
-                originalPhotoLabel.isHidden = true
-            } else {
-                originalPhotoButton.isHidden = false
-                if isSelectOriginalPhoto {
-                    originalPhotoLabel.isHidden = false
-                }
-            }
-        }
+        doneButton.setTitle(String(format: "%@(%zd)", tzImagePickerVc.doneBtnTitleStr,tzImagePickerVc.selectedModels.count), for: .normal)
         
         doneButton.isHidden = false
         selectButton.isHidden = !tzImagePickerVc.showSelectBtn
         if TZImageManager.manager.isPhotoSelectable(with: model.asset) == false {
-            numberLabel.isHidden = true
-            numberImageView.isHidden = true
             selectButton.isHidden = true
-            originalPhotoButton.isHidden = true
-            originalPhotoLabel.isHidden = true
             doneButton.isHidden = true
         }
         self.didICloudSyncStatusChanged(model: model)
@@ -589,8 +504,6 @@ class TZPhotoPreviewController: UIViewController,UICollectionViewDataSource,UICo
                     self.doneButton.isEnabled = true
                 }
                 self.selectButton.isEnabled = !currentModel.iCloudFailed || _tzImagePickerVc.showSelectBtn
-                self.originalPhotoButton.isHidden = currentModel.iCloudFailed
-                self.originalPhotoLabel.isHidden = currentModel.iCloudFailed
             }
         }
         

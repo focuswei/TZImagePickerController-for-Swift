@@ -239,7 +239,7 @@ class TZImagePickerController: UINavigationController {
     ///< 自定义返回按钮样式及其属性
     var navLeftBarButtonSettingClosure: ((_ leftButton: UIButton) -> Void)?
     
-    var isSelectOriginalPhoto: Bool = false
+    var isSelectOriginalPhoto: Bool = true
     var needShowStatusBar: Bool = false
     
     var takePictureImage: UIImage?
