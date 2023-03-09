@@ -48,10 +48,10 @@ class TZGifPhotoPreviewController: UIViewController {
         doneButton.addTarget(self, action: #selector(doneButtonClick), for: .touchUpInside)
         if let tzImagePickerVc = self.navigationController as? TZImagePickerController {
             doneButton.setTitle(tzImagePickerVc.doneBtnTitleStr, for: .normal)
-            doneButton.setTitleColor(tzImagePickerVc.oKButtonTitleColorNormal, for: .normal)
+            doneButton.setTitleColor(TZImagePickerController.oKButtonTitleColorNormal, for: .normal)
         } else {
             doneButton.setTitle(Bundle.tz_localizedString(for: "Done"), for: .normal)
-            doneButton.setTitleColor(UIColor.doneButtonTitleColor, for: .normal)
+            doneButton.setTitleColor(TZImagePickerController.oKButtonTitleColorNormal, for: .normal)
         }
         toolBar.addSubview(doneButton)
         

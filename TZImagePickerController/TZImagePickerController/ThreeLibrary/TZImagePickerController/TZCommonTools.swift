@@ -58,11 +58,11 @@ class TZCommonTools {
         guard #available(iOS 13.0, *) else  {
             return UIApplication.shared.keyWindow
         }
-        
-        let keyWindow = UIApplication.shared.windows
-            .filter({ $0.isKeyWindow })
-            .first
-        return keyWindow
+        let originalKeyWindow = UIApplication.shared.connectedScenes
+            .compactMap { $0 as? UIWindowScene }
+            .flatMap { $0.windows }
+            .first(where: { $0.isKeyWindow })
+        return originalKeyWindow
     }
     
     static func isStatusBarHidden() -> Bool {

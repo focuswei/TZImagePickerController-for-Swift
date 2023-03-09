@@ -11,6 +11,7 @@ import UIKit
 
 extension UIImage {
     
+    // only return 2x png
     static func tz_imageNamedFromMyBundle(name: String) -> UIImage? {
         let imgBundle = Bundle.tz_imagePickerBundle()
         var imgName = name

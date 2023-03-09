@@ -9,7 +9,7 @@
 import UIKit
 
 extension UIColor {
-    convenience init(hexColor: UInt32, alpha: CGFloat) {
+    convenience fileprivate init(hexColor: UInt32, alpha: CGFloat) {
         let red = CGFloat((hexColor & 0xFF0000) >> 16) / 255.0
         let green = CGFloat((hexColor & 0x00FF00) >> 8) / 255.0
         let blue = CGFloat((hexColor & 0x0000FF)) / 255.0
@@ -19,7 +19,7 @@ extension UIColor {
         }
     }
     
-    convenience init(hexColor: UInt32) {
+    convenience fileprivate init(hexColor: UInt32) {
         self.init(hexColor: hexColor, alpha: 1.0)
     }
     
@@ -35,6 +35,6 @@ extension UIColor {
         return UIColor.init(red: rgb, green: rgb, blue: rgb, alpha: 0.7)
     }
     static var iconThemeColor :        UIColor { return UIColor.init(hexColor: 0xA22C5F) }
-    static var doneButtonTitleColor :      UIColor { return UIColor.init(hexColor: 0x444344) }
+    static var disableButtonTitleColor :      UIColor { return UIColor.init(hexColor: 0x444344) }
 
 }

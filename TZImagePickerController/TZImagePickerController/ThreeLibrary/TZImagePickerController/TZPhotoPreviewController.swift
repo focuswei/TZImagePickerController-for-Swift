@@ -102,7 +102,7 @@ class TZPhotoPreviewController: UIViewController,UICollectionViewDataSource,UICo
     }
     
     override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillAppear(animated)
+        super.viewWillDisappear(animated)
 
         guard let tzImagePickerVc = self.navigationController as? TZImagePickerController else { return }
         if tzImagePickerVc.needShowStatusBar {
@@ -143,8 +143,11 @@ class TZPhotoPreviewController: UIViewController,UICollectionViewDataSource,UICo
         toolBar.frame = CGRect(x: 0, y: toolBarTop, width: self.view.tz_width, height: toolBarHeight)
         
         
-        doneButton.frame = CGRect(x: self.view.tz_width - 70 - 12, y: 10, width: 70, height: toolBarHeight - 20)
-        
+        doneButton.frame = CGRect(x: self.view.tz_width - 70 - 12, y: 10, width: 70, height: 35)
+        if tzImagePickerVc.showSelectBtn == false {
+            toolBar.frame = .zero
+            doneButton.frame = .zero
+        }
         self.configCropView()
         
         
@@ -273,7 +276,7 @@ class TZPhotoPreviewController: UIViewController,UICollectionViewDataSource,UICo
         doneButton.setTitle(tzImagePickerVc.doneBtnTitleStr, for: .normal)
         doneButton.setTitle(tzImagePickerVc.doneBtnTitleStr, for: .disabled)
         doneButton.setTitleColor(UIColor.white, for: .normal)
-        doneButton.setTitleColor(tzImagePickerVc.oKButtonTitleColorDisabled, for: .disabled)
+        doneButton.setTitleColor(TZImagePickerController.oKButtonTitleColorDisabled, for: .disabled)
         doneButton.setBackgroundImage(UIImage.tz_imageNamedFromMyBundle(name: "photo_doneBtnBg_normal"), for: .normal)
         doneButton.setBackgroundImage(UIImage.tz_imageNamedFromMyBundle(name: "photo_doneBtnBg_disable"), for: .disabled)
         doneButton.isEnabled = tzImagePickerVc.selectedModels.count > 0 || tzImagePickerVc.alwaysEnableDoneBtn

@@ -153,7 +153,7 @@ class TZAssetCell: UICollectionViewCell {
     }()
     private lazy var selectImageView: UIImageView = {
        let selectImageView = UIImageView.init()
-       selectImageView.contentMode = UIView.ContentMode.center
+       selectImageView.contentMode = UIView.ContentMode.scaleAspectFit
        selectImageView.clipsToBounds = true
        self.contentView.addSubview(selectImageView)
        
@@ -217,11 +217,6 @@ class TZAssetCell: UICollectionViewCell {
         }
         
         self.selectImageView.frame = CGRect(x: self.tz_width - 27, y: 3, width: 24, height: 24)
-        if let width = self.selectImageView.image?.size.width, width <= CGFloat(27.0) {
-            selectImageView.contentMode = UIView.ContentMode.center
-        } else {
-            selectImageView.contentMode = UIView.ContentMode.scaleAspectFit
-        }
         self.indexLabel.frame = selectImageView.frame
         self.imageView.frame = CGRect(x: 0, y: 0, width: self.tz_width, height: self.tz_height)
         
@@ -331,10 +326,10 @@ class TZAssetCameraCell: UICollectionViewCell {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        self.backgroundColor = UIColor.white
+        let rgb: CGFloat = 223/255.0
+        self.backgroundColor = .init(red: rgb, green: rgb, blue: rgb, alpha: 1.0)
         imageView = UIImageView.init()
-        imageView?.backgroundColor = UIColor.init(white: 1, alpha: 0.5)
-        imageView?.contentMode = .scaleAspectFill
+        imageView?.contentMode = .center
         self.contentView.addSubview(imageView!)
         self.clipsToBounds = true
     }
@@ -349,4 +344,36 @@ class TZAssetCameraCell: UICollectionViewCell {
     }
 }
 
+class TZAssetAddMoreCell: TZAssetCameraCell {
+    var tipLabel: UILabel?
+    
+    override func awakeFromNib() {
+        super.awakeFromNib()
+        // Initialization code
+    }
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        tipLabel = UILabel()
+        tipLabel?.numberOfLines = 2
+        tipLabel?.textAlignment = .center
+        tipLabel?.font = UIFont.systemFont(ofSize: 12)
+        tipLabel?.lineBreakMode = .byTruncatingMiddle
+        self.contentView.addSubview(tipLabel!)
+        imageView = UIImageView.init()
+        imageView?.contentMode = .scaleAspectFit
+        contentView.addSubview(imageView!)
+        self.clipsToBounds = true
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        self.imageView?.frame = CGRect(x: self.contentView.center.x - 20, y: 10, width: 40, height: 40)
+        self.tipLabel?.frame = CGRect(x: 5, y: CGRectGetMaxY(self.imageView?.frame ?? .zero), width: self.tz_width - 10, height: self.tz_height*0.5 - 5)
+    }
+}
 

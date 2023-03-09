@@ -10,6 +10,7 @@ import UIKit
 import CoreLocation
 import Photos
 import MobileCoreServices
+import PhotosUI
 
 class TZPhotoPickerController: UIViewController, UICollectionViewDataSource,UICollectionViewDelegate,UIImagePickerControllerDelegate,UINavigationControllerDelegate,PHPhotoLibraryChangeObserver {
     
@@ -25,9 +26,12 @@ class TZPhotoPickerController: UIViewController, UICollectionViewDataSource,UICo
     private var _originalPhotoButton: UIButton = UIButton.init(type: .custom)
     private var _originalPhotoLabel: UILabel = UILabel.init()
     private var _divideLine: UIView = UIView.init(frame: .zero)
+    private var _uploadButton: UIButton = UIButton.init(type: .custom)
     
     private var _shouldScrollToBottom: Bool  = true
     private var _showTakePhotoBtn: Bool = true
+    private var _authorizationLimited: Bool = false
+    
     private var isSavingMedia: Bool = false
     private var isFetchingMedia: Bool = false
     
@@ -118,10 +122,10 @@ class TZPhotoPickerController: UIViewController, UICollectionViewDataSource,UICo
         }
         
         _showTakePhotoBtn = model?.isCameraRoll == true && ((tzImagePickerVc.allowTakePicture && tzImagePickerVc.allowPickingImage) || (tzImagePickerVc.allowTakeVideo && tzImagePickerVc.allowPickingVideo))
-        
+        _authorizationLimited = model?.isCameraRoll == true && TZImageManager.manager.authorizationStatusIsLimited()
         
         NotificationCenter.default.addObserver(self, selector: #selector(didChangeStatusBarOrientationNotification(noti:)), name: UIApplication.didChangeStatusBarOrientationNotification, object: nil)
-        
+        PHPhotoLibrary.shared().register(self)
         
     }
     
@@ -146,6 +150,9 @@ class TZPhotoPickerController: UIViewController, UICollectionViewDataSource,UICo
         }
         
         collectionView?.frame = CGRect(x: 0, y: top, width: self.view.tz_width, height: collectionViewHeight)
+        if #available(iOS 11.0, *) {
+            collectionView?.contentInsetAdjustmentBehavior = .never
+        }
         noDataLabel?.frame = collectionView?.bounds ?? .zero
         let itemWH: CGFloat = (self.view.tz_width - CGFloat(self.columnNumber + 1) * itemMargin) / CGFloat(self.columnNumber)
         layout.itemSize = CGSize(width: itemWH, height: itemWH)
@@ -164,7 +171,23 @@ class TZPhotoPickerController: UIViewController, UICollectionViewDataSource,UICo
             let navigationHeight: CGFloat = naviBarHeight + TZCommonTools.tz_statusBarHeight()
             toolBarTop = self.view.tz_height - toolBarHeight - navigationHeight
         }
-        _bottomToolBar?.frame = CGRect(x: 0, y: toolBarTop, width: self.view.tz_width, height: toolBarHeight)
+        if (tzImagePickerVc.showSelectBtn) {
+            _bottomToolBar?.frame = CGRect(x: 0, y: toolBarTop, width: self.view.tz_width, height: toolBarHeight)
+        } else {
+            _bottomToolBar?.frame = CGRect.zero
+            _uploadButton.frame = CGRect(x: self.view.center.x - 75, y: toolBarTop - 68, width: 150, height: 40)
+            _uploadButton.titleLabel?.font = UIFont.systemFont(ofSize: 16)
+            _uploadButton.addTarget(self, action: #selector(doneButtonClick), for: .touchUpInside)
+            _uploadButton.setTitle(tzImagePickerVc.uploadBtnTitleStr, for: .normal)
+            _uploadButton.setTitle(tzImagePickerVc.uploadBtnTitleStr, for: .disabled)
+            _uploadButton.setTitleColor(UIColor.white, for: .normal)
+            _uploadButton.setTitleColor(TZImagePickerController.oKButtonTitleColorDisabled, for: .disabled)
+            _uploadButton.isEnabled = tzImagePickerVc.selectedModels.count > 0 || tzImagePickerVc.alwaysEnableDoneBtn
+            _uploadButton.backgroundColor = UIColor.iconThemeColor
+            _uploadButton.layer.cornerRadius = 20
+            _uploadButton.layer.masksToBounds = true
+            view.addSubview(_uploadButton)
+        }
         
         var previewWidth: CGFloat = tzImagePickerVc.previewBtnTitleStr.boundingRect(with: CGSize(width: CGFloat.greatestFiniteMagnitude, height: CGFloat.greatestFiniteMagnitude), options: NSStringDrawingOptions.usesFontLeading, attributes: [NSAttributedString.Key.font:UIFont.systemFont(ofSize: 16)], context: nil).width + 2
         
@@ -201,6 +224,7 @@ class TZPhotoPickerController: UIViewController, UICollectionViewDataSource,UICo
             tzImagePickerVc.showProgressHUD()
         }
         DispatchQueue.global().async {
+            let systemVersion = Float(UIDevice.current.systemVersion) ?? 0
             if tzImagePickerVc.sortAscendingByModificationDate == false && self.isFirstAppear && self.model?.isCameraRoll == true {
                 TZImageManager.manager.getCameraRollAlbum(allowPickingVideo: tzImagePickerVc.allowPickingVideo, allowPickingImage: tzImagePickerVc.allowPickingImage, needFetchAssets: true) { [weak self] (model) in
                     self?.model = model
@@ -244,7 +268,7 @@ class TZPhotoPickerController: UIViewController, UICollectionViewDataSource,UICo
         _doneButton.setTitle(tzImagePickerVc.doneBtnTitleStr, for: .normal)
         _doneButton.setTitle(tzImagePickerVc.doneBtnTitleStr, for: .disabled)
         _doneButton.setTitleColor(UIColor.white, for: .normal)
-        _doneButton.setTitleColor(tzImagePickerVc.oKButtonTitleColorDisabled, for: .disabled)
+        _doneButton.setTitleColor(TZImagePickerController.oKButtonTitleColorDisabled, for: .disabled)
         _doneButton.setBackgroundImage(UIImage.tz_imageNamedFromMyBundle(name: "photo_doneBtnBg_normal"), for: .normal)
         _doneButton.setBackgroundImage(UIImage.tz_imageNamedFromMyBundle(name: "photo_doneBtnBg_disable"), for: .disabled)
         _doneButton.isEnabled = tzImagePickerVc.selectedModels.count > 0 || tzImagePickerVc.alwaysEnableDoneBtn
@@ -280,6 +304,7 @@ class TZPhotoPickerController: UIViewController, UICollectionViewDataSource,UICo
             view.addSubview(collectionView!)
             collectionView?.register(TZAssetCell.self, forCellWithReuseIdentifier: "TZAssetCell")
             collectionView?.register(TZAssetCameraCell.self, forCellWithReuseIdentifier: "TZAssetCameraCell")
+            collectionView?.register(TZAssetAddMoreCell.self, forCellWithReuseIdentifier: "TZAssetAddMoreCell")
         } else {
             collectionView?.reloadData()
         }
@@ -455,6 +480,12 @@ class TZPhotoPickerController: UIViewController, UICollectionViewDataSource,UICo
         }
     }
     
+    private func addMorePhoto() {
+        if #available(iOS 14, *) {
+            PHPhotoLibrary.shared().presentLimitedLibraryPicker(from: self)
+        }
+    }
+    
     /// 进入相机
     private func pushImagePickerController() {
         if let tzImagePickerVc = self.navigationController as? TZImagePickerController,
@@ -580,6 +611,8 @@ class TZPhotoPickerController: UIViewController, UICollectionViewDataSource,UICo
                 photoPreviewVc.models = _models
                 self.pushPhotoPrevireViewController(photoPreviewVc: photoPreviewVc, false)
             } else {
+                tzImagePickerVc.selectedModels.removeAll()
+                tzImagePickerVc.selectedAssetIds.removeAll()
                 tzImagePickerVc.addSelectedModel(with: assetModel)
                 self.doneButtonClick()
             }
@@ -601,6 +634,44 @@ class TZPhotoPickerController: UIViewController, UICollectionViewDataSource,UICo
         _shouldScrollToBottom = true
         self.scrollCollectionViewToBottom()
         
+    }
+    
+    private func getAllCellCount() -> Int {
+        var count = _models.count
+        if _showTakePhotoBtn {
+            count += 1
+        }
+        if _authorizationLimited {
+            count += 1
+        }
+        return count
+    }
+    
+    private func getTakePhotoCellIndex() -> Int {
+        guard let tzImagePickerVc = self.navigationController as? TZImagePickerController else { return 0 }
+        if !_showTakePhotoBtn {
+            return -1;
+        }
+        if tzImagePickerVc.sortAscendingByModificationDate {
+            return getAllCellCount() - 1
+        } else {
+            return 0
+        }
+    }
+    
+    private func getAddMorePhotoCellIndex() -> Int {
+        guard let tzImagePickerVc = self.navigationController as? TZImagePickerController else { return 0 }
+        if !_authorizationLimited {
+            return -1;
+        }
+        if tzImagePickerVc.sortAscendingByModificationDate {
+            if _showTakePhotoBtn {
+                return getAllCellCount() - 2
+            }
+            return getAllCellCount() - 1
+        } else {
+            return _showTakePhotoBtn ? 1:0
+        }
     }
     
     //MARK: Asset Caching
@@ -646,22 +717,24 @@ class TZPhotoPickerController: UIViewController, UICollectionViewDataSource,UICo
     //MARK: UICollectionViewDataSource
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        if _showTakePhotoBtn {
-            return _models.count + 1
-        }
-        return _models.count
+        return getAllCellCount()
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let tzImagePickerVc = self.navigationController as? TZImagePickerController else { fatalError() }
-        if (tzImagePickerVc.sortAscendingByModificationDate && indexPath.item >= _models.count || (!tzImagePickerVc.sortAscendingByModificationDate && indexPath.item == 0)) && _showTakePhotoBtn {
+        if indexPath.item == getAddMorePhotoCellIndex() {
+            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "TZAssetAddMoreCell", for: indexPath) as? TZAssetAddMoreCell  else {
+                fatalError()
+            }
+            cell.imageView?.image = tzImagePickerVc.addMorePhotoImage
+            cell.tipLabel?.text = Bundle.tz_localizedString(for: "Add more accessible photos")
+            return cell
+        }
+        if indexPath.item == getTakePhotoCellIndex() {
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "TZAssetCameraCell", for: indexPath) as? TZAssetCameraCell  else {
                 fatalError()
             }
             cell.imageView?.image = tzImagePickerVc.takePictureImage
-            cell.imageView?.contentMode = .center
-            let rgb: CGFloat = 223/255.0
-            cell.imageView?.backgroundColor = .init(red: rgb, green: rgb, blue: rgb, alpha: 1.0)
             return cell
         }
         
@@ -733,7 +806,11 @@ class TZPhotoPickerController: UIViewController, UICollectionViewDataSource,UICo
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         guard let tzImagePickerVc = self.navigationController as? TZImagePickerController else { return }
-        if (((tzImagePickerVc.sortAscendingByModificationDate && indexPath.item >= _models.count) || (!tzImagePickerVc.sortAscendingByModificationDate && indexPath.item == 0)) && _showTakePhotoBtn) {
+        if indexPath.item == getAddMorePhotoCellIndex() {
+            self.addMorePhoto()
+            return
+        }
+        if indexPath.item == getTakePhotoCellIndex() {
             self.takePhoto()
             return
         }
@@ -797,8 +874,25 @@ class TZPhotoPickerController: UIViewController, UICollectionViewDataSource,UICo
             return
         }
         DispatchQueue.main.async {
-            self.model?.refreshFetchResult()
-            self.fetchAssetModels()
+            guard let result = self.model?.result else { return }
+            let changeDetail = changeInstance.changeDetails(for: result)
+            
+            if changeDetail?.hasIncrementalChanges == false {
+                self.model?.refreshFetchResult()
+                self.fetchAssetModels()
+            } else if changeDetail?.hasIncrementalChanges == true {
+                let insertedCount = changeDetail?.insertedObjects.count ?? 0
+                let removedCount = changeDetail?.removedObjects.count ?? 0
+                let changedCount = changeDetail?.changedObjects.count ?? 0
+                if (insertedCount > 0 || removedCount > 0 || changedCount > 0) {
+                    if let afterResult = changeDetail?.fetchResultAfterChanges {
+                        self.model?.result = afterResult
+                    }
+                    self.model?.count = changeDetail?.fetchResultAfterChanges.count ?? self.model!.count
+                    self.fetchAssetModels()
+                }
+            }
+            
         }
     }
     @objc func didChangeStatusBarOrientationNotification(noti: Notification) -> Void {

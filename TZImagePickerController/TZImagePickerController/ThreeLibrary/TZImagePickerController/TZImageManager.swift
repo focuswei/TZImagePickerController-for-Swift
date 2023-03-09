@@ -70,6 +70,15 @@ final class TZImageManager: NSObject,TZImagePickerControllerDelegate  {
         return status == .authorized
     }
     
+    /// check PHAuthorizationStatusLimited
+    func authorizationStatusIsLimited() -> Bool {
+        if #available(iOS 14.0, *) {
+            let status = PHPhotoLibrary.authorizationStatus(for: .readWrite)
+            return status == .limited
+        }
+        return false
+    }
+    
     func requestAuthorizationWithCompletion(callback: (() -> Void)?) {
         
         let callCompletionBlock = {
@@ -94,7 +103,7 @@ final class TZImageManager: NSObject,TZImagePickerControllerDelegate  {
             if collection.estimatedAssetCount <= 0 { return }
             if self.isCameraRollAlbum(metadata: collection) {
                 let fetchResult = PHAsset.fetchAssets(in: collection, options: option)
-                let model = TZAlbumModel.init(with: fetchResult, name: collection.localizedTitle ?? "", isCameraRoll: true, needFetchAssets: needFetchAssets)
+                let model = TZAlbumModel.init(with: fetchResult, name: collection.localizedTitle ?? "", isCameraRoll: true, needFetchAssets: needFetchAssets, collection: collection, options: option)
                 callback?(model)
                 stop.pointee = true
             }
@@ -135,7 +144,7 @@ final class TZImageManager: NSObject,TZImagePickerControllerDelegate  {
                             return
                         }
                     
-                    let model = TZAlbumModel.init(with: fetchResult, name: collection.localizedTitle ?? "", isCameraRoll: self.isCameraRollAlbum(metadata: collection), needFetchAssets: needFetchAssets)
+                    let model = TZAlbumModel.init(with: fetchResult, name: collection.localizedTitle ?? "", isCameraRoll: self.isCameraRollAlbum(metadata: collection), needFetchAssets: needFetchAssets, collection: collection, options: option)
                     if collection.assetCollectionSubtype == .smartAlbumUserLibrary {
                         albumArr.insert(model, at: 0)
                     } else {
@@ -316,7 +325,9 @@ final class TZImageManager: NSObject,TZImagePickerControllerDelegate  {
         options.progressHandler = { (progress,error,stop,info) in
             progressHandler?(progress,error,stop.pointee.boolValue,info)
         }
-        options.deliveryMode = .highQualityFormat
+        if options.version == .current {
+            options.deliveryMode = .highQualityFormat
+        }
         return PHImageManager.default().requestImageData(for: asset, options: options) { (result, dataUTI, orientation, info) in
             if let isCancel = info?[PHImageCancelledKey] as? Bool,
                 isCancel == false,

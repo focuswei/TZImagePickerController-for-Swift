@@ -51,6 +51,7 @@ class TZAlbumModel: NSObject {
     var name: String = ""
     var count: Int = 0
     var result: PHFetchResult<PHAsset>
+    /// keep collection for next fetch assets when call refreshFetchResult
     var collection: PHAssetCollection?
     var options: PHFetchOptions?
     
@@ -79,11 +80,13 @@ class TZAlbumModel: NSObject {
     }
     
     
-    init(with phresult: PHFetchResult<PHAsset>, name: String, isCameraRoll: Bool, needFetchAssets: Bool) {
+    init(with phresult: PHFetchResult<PHAsset>, name: String, isCameraRoll: Bool, needFetchAssets: Bool, collection: PHAssetCollection, options: PHFetchOptions) {
         result = phresult
         super.init()
         self.setFetchResult(result: phresult, needFetchAssets: needFetchAssets)
         self.name = name
+        self.collection = collection
+        self.options = options
         self.count = phresult.count
         self.isCameraRoll = isCameraRoll
         self.count = result.count

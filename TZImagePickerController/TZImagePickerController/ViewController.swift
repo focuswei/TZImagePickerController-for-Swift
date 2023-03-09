@@ -61,8 +61,6 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     lazy var imagePickerVC: UIImagePickerController = {
         let imagePickerVC = UIImagePickerController()
         imagePickerVC.delegate = self
-        imagePickerVC.navigationBar.barTintColor = self.navigationController?.navigationBar.barTintColor
-        imagePickerVC.navigationBar.tintColor = self.navigationController?.navigationBar.tintColor
         let tzBarItem: UIBarButtonItem?, BarItem: UIBarButtonItem?
         if #available(iOS 9.0, *) {
             tzBarItem = UIBarButtonItem.appearance(whenContainedInInstancesOf: [TZImagePickerController.classForCoder() as! UIAppearanceContainer.Type])
@@ -92,10 +90,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
 
-        let contentSizeH: CGFloat = 12 * 35 + 20
-        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.01) {
-            self.scrollView.contentSize = CGSize(width: 0, height: contentSizeH + 5)
-        }
+
         let width = self.view.frame.width - 2 * _margin - 4
         _margin = 4
         _itemWH = width / 3 - _margin

@@ -189,7 +189,7 @@ class TZImagePickerController: UINavigationController {
         }
     }
     
-    var statusBarStyle: UIStatusBarStyle = .default
+    var statusBarStyle: UIStatusBarStyle = .lightContent
     
     /// 单选模式,maxImagesCount为1时才生效
     ///< 在单选模式下，照片列表页中，显示选择按钮,默认为NO
@@ -243,6 +243,7 @@ class TZImagePickerController: UINavigationController {
     var needShowStatusBar: Bool = false
     
     var takePictureImage: UIImage?
+    var addMorePhotoImage: UIImage?
     var photoSelImage: UIImage?
     var photoDefImage: UIImage?
     var photoOriginSelImage: UIImage?
@@ -250,15 +251,15 @@ class TZImagePickerController: UINavigationController {
     var photoPreviewOriginDefImage: UIImage?
     var photoNumberIconImage: UIImage?
     
-    var oKButtonTitleColorNormal: UIColor = UIColor.doneButtonTitleColor
-    var oKButtonTitleColorDisabled: UIColor = UIColor.doneButtonTitleColor
+    static let oKButtonTitleColorNormal: UIColor = UIColor.white
+    static let oKButtonTitleColorDisabled: UIColor = UIColor.disableButtonTitleColor
     var naviBgColor: UIColor? {
         didSet { self.navigationBar.barTintColor = naviBgColor }
     }
-    var naviTitleColor: UIColor? {
+    var naviTitleColor: UIColor = UIColor.white  {
         didSet { self.configNaviTitleAppearance() }
     }
-    var naviTitleFont: UIFont? {
+    var naviTitleFont: UIFont = UIFont.systemFont(ofSize: 17) {
         didSet { self.configNaviTitleAppearance() }
     }
     var barItemTextColor: UIColor? {
@@ -274,6 +275,7 @@ class TZImagePickerController: UINavigationController {
     var fullImageBtnTitleStr: String = Bundle.tz_localizedString(for: "Full image")
     var settingBtnTitleStr: String  = Bundle.tz_localizedString(for: "Setting")
     var processHintStr: String = Bundle.tz_localizedString(for: "Processing...")
+    var uploadBtnTitleStr: String = Bundle.tz_localizedString(for: "Upload")
     
     var iconThemeColor: UIColor? {
         didSet { self.configDefaultImageName() }
@@ -320,6 +322,8 @@ class TZImagePickerController: UINavigationController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         originStatusBarStyle = TZCommonTools.getStatusBarStyle()
+        self.setAppearanceColor()
+        self.configNaviTitleAppearance()
     }
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
@@ -333,11 +337,15 @@ class TZImagePickerController: UINavigationController {
         self.navigationBar.isTranslucent = true
         TZImageManager.manager.shouldFixOrientation = false
         
-        self.setAppearanceColor()
-        self.automaticallyAdjustsScrollViewInsets = false
+        if #available(iOS 11.0, *) {
+
+        } else {
+            self.automaticallyAdjustsScrollViewInsets = false
+        }
         if self.needShowStatusBar {
             UIApplication.shared.isStatusBarHidden = false
         }
+        
     }
     
     override func viewDidLayoutSubviews() {
@@ -442,8 +450,6 @@ class TZImagePickerController: UINavigationController {
         self.timeout = 15
         self.photoWidth = 828.0
         self.photoPreviewMaxWidth = 600
-        self.naviTitleColor = UIColor.white
-        self.naviTitleFont = UIFont.systemFont(ofSize: 17)
         self.barItemTextFont = UIFont.systemFont(ofSize: 15)
         self.barItemTextColor = .white
         self.allowPreview = true
@@ -465,21 +471,31 @@ class TZImagePickerController: UINavigationController {
     }
     
     func configDefaultImageName() {
-        self.takePictureImage = UIImage.tz_imageNamedFromMyBundle(name: "takePicture80")
+        self.takePictureImage = UIImage.tz_imageNamedFromMyBundle(name: "picker_tagePhoto")
         self.photoSelImage = UIImage.tz_imageNamedFromMyBundle(name: "photo_sel_photoPickerVc")
         self.photoDefImage = UIImage.tz_imageNamedFromMyBundle(name: "photo_def_photoPickerVc")
-        if let image = self.createImageWithColor(color: nil, size: CGSize(width: 24, height: 24), radius: 12) {
+        if self.showSelectedIndex,
+            let image = self.createImageWithColor(color: nil, size: CGSize(width: 24, height: 24), radius: 12) {
             self.photoNumberIconImage = image
         }
         self.photoPreviewOriginDefImage = UIImage.tz_imageNamedFromMyBundle(name: "preview_original_def")
         self.photoOriginDefImage = UIImage.tz_imageNamedFromMyBundle(name: "photo_original_def")
         self.photoOriginSelImage = UIImage.tz_imageNamedFromMyBundle(name: "photo_original_sel")
+        self.addMorePhotoImage = UIImage.tz_imageNamedFromMyBundle(name: "photo_picker_add")
     }
     
     func setAppearanceColor() {
         self.view.backgroundColor = UIColor.white
-        self.navigationBar.barStyle = .black
-        self.navigationBar.barTintColor = UIColor.toolBarBgColor
+        if #available(iOS 15.0, *) {
+            let appearance = self.navigationBar.standardAppearance
+            appearance.configureWithOpaqueBackground()
+            appearance.backgroundColor = UIColor.iconThemeColor
+            self.navigationBar.standardAppearance = appearance
+            self.navigationBar.scrollEdgeAppearance = self.navigationBar.standardAppearance
+        } else {
+            self.navigationBar.barTintColor = UIColor.iconThemeColor
+        }
+        self.navigationBar.barStyle = .`default`
         
     }
     
@@ -690,13 +706,16 @@ class TZImagePickerController: UINavigationController {
     
     private func configNaviTitleAppearance() {
         var textAttr: [NSAttributedString.Key:Any] = [:]
-        if self.naviTitleColor != nil {
-            textAttr[NSAttributedString.Key.foregroundColor] = self.naviTitleColor!
+        textAttr[NSAttributedString.Key.foregroundColor] = self.naviTitleColor
+        textAttr[NSAttributedString.Key.font] = self.naviTitleFont
+        
+        if #available(iOS 13.0, *) {
+            let appearnce = self.navigationBar.standardAppearance
+            appearnce.titleTextAttributes = textAttr
+            self.navigationBar.standardAppearance = appearnce
+        } else {
+            self.navigationBar.titleTextAttributes = textAttr
         }
-        if self.naviTitleFont != nil {
-            textAttr[NSAttributedString.Key.font] = self.naviTitleFont
-        }
-        self.navigationBar.titleTextAttributes = textAttr
     }
     
     required init?(coder aDecoder: NSCoder) {

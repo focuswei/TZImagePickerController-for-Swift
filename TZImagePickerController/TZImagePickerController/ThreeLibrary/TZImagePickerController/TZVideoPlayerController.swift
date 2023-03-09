@@ -69,7 +69,7 @@ class TZVideoPlayerController: UIViewController {
         playerLayer?.frame = self.view.bounds
         let toolBarHeight: CGFloat = TZCommonTools.tz_safeAreaInsets().bottom + 44
         toolBar.frame = CGRect(x: 0, y: self.view.tz_height - toolBarHeight, width: self.view.tz_width, height: toolBarHeight)
-        doneButton.frame = CGRect(x: self.view.tz_width-44-12, y: 0, width: 44, height: 44)
+        doneButton.frame = CGRect(x: self.view.tz_width-70-12, y: 8, width: 70, height: 35)
         playButton.frame = CGRect(x: 0, y: statusBarAndNaviBarHeight, width: self.view.tz_width, height: self.view.tz_height - statusBarAndNaviBarHeight - toolBarHeight)
         
         
@@ -80,7 +80,7 @@ class TZVideoPlayerController: UIViewController {
             TZImageManager.manager.getPhoto(with: asset) { [weak self] (photo, info, isDegraded) in
                 let iCloudSyncFailed: Bool = TZCommonTools.isICloudSync(error: info?[PHImageErrorKey] as? NSError)
                 self?.iCloudErrorView.isHidden = !iCloudSyncFailed
-                if isDegraded {
+                if !isDegraded {
                     self?.cover = photo
                     self?.doneButton.isEnabled = true
                 }
@@ -133,22 +133,25 @@ class TZVideoPlayerController: UIViewController {
         toolBar.backgroundColor = UIColor.toolBarBgColor
         
         doneButton = UIButton.init(type: .custom)
+        doneButton.setBackgroundImage(UIImage.tz_imageNamedFromMyBundle(name: "photo_doneBtnBg_normal"), for: .normal)
+        doneButton.setBackgroundImage(UIImage.tz_imageNamedFromMyBundle(name: "photo_doneBtnBg_disable"), for: .disabled)
         doneButton.titleLabel?.font = UIFont.systemFont(ofSize: 16.0)
         if cover == nil {
             doneButton.isEnabled = false
         }
+        doneButton.layer.cornerRadius = 3
+        doneButton.layer.masksToBounds = true
         doneButton.addTarget(self, action: #selector(doneButtonClick), for: .touchUpInside)
         
         
         
         if let tzImagePickerVc: TZImagePickerController = self.navigationController as? TZImagePickerController {
             doneButton.setTitle(tzImagePickerVc.doneBtnTitleStr, for: .normal)
-            doneButton.setTitleColor(tzImagePickerVc.oKButtonTitleColorNormal, for: .normal)
-            doneButton.setTitleColor(tzImagePickerVc.oKButtonTitleColorNormal, for: .disabled)
         } else {
             doneButton.setTitle(Bundle.tz_localizedString(for: "Done"), for: .normal)
-            doneButton.setTitleColor(UIColor.doneButtonTitleColor, for: .normal)
         }
+        doneButton.setTitleColor(TZImagePickerController.oKButtonTitleColorNormal, for: .normal)
+        doneButton.setTitleColor(TZImagePickerController.oKButtonTitleColorDisabled, for: .disabled)
         
         toolBar.addSubview(doneButton)
         self.view.addSubview(toolBar)
