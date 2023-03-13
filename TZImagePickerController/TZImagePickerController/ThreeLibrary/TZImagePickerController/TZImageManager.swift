@@ -119,7 +119,10 @@ final class TZImageManager: NSObject,TZImagePickerControllerDelegate  {
         let smartAlbums: PHFetchResult = PHAssetCollection.fetchAssetCollections(with: .smartAlbum, subtype: .albumRegular, options: nil)
         let syncedAlbums: PHFetchResult = PHAssetCollection.fetchAssetCollections(with: .album, subtype: .albumSyncedAlbum, options: nil)
         let sharedAlbums = PHAssetCollection.fetchAssetCollections(with: .album, subtype: .albumCloudShared, options: nil)
-        let allAlbums: Array<PHFetchResult<PHAssetCollection>> = [myPhotoStreamAlbum,smartAlbums, syncedAlbums, sharedAlbums]
+        let otherAppOp = PHFetchOptions()
+        otherAppOp.includeAssetSourceTypes = .typeUserLibrary
+        let otherAppAlbums = PHAssetCollection.fetchAssetCollections(with: .album, subtype: .albumRegular, options: otherAppOp)
+        let allAlbums: Array<PHFetchResult<PHAssetCollection>> = [myPhotoStreamAlbum,smartAlbums, syncedAlbums, sharedAlbums,otherAppAlbums]
 
         allAlbums.map({ albums in
             albums.enumerateObjects { (collection, index, stop) in
@@ -137,12 +140,12 @@ final class TZImageManager: NSObject,TZImagePickerControllerDelegate  {
                         }
                     }
                     
-                    if collection.localizedTitle?.contains("Hidden") == true || collection.localizedTitle == "已隐藏" {
-                            return
-                        }
-                    if collection.localizedTitle?.contains("Deleted") == true || collection.localizedTitle == "最近删除" {
-                            return
-                        }
+                    if collection.localizedTitle?.contains(Bundle.tz_localizedString(for: "Hidden")) == true {
+                        return
+                    }
+                    if collection.localizedTitle?.contains(Bundle.tz_localizedString(for: "Deleted")) == true {
+                        return
+                    }
                     
                     let model = TZAlbumModel.init(with: fetchResult, name: collection.localizedTitle ?? "", isCameraRoll: self.isCameraRollAlbum(metadata: collection), needFetchAssets: needFetchAssets, collection: collection, options: option)
                     if collection.assetCollectionSubtype == .smartAlbumUserLibrary {

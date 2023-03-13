@@ -87,10 +87,11 @@ class TZAlbumPickerController: UIViewController,UITableViewDataSource,UITableVie
                     guard let stongSelf = self else { return }
                     if self?.tableView == nil {
                         self?.tableView = UITableView.init(frame: .zero, style: .plain)
-                        self?.tableView?.rowHeight = 70
+                        self?.tableView?.rowHeight = 90
                         self?.tableView?.tableFooterView = UIView()
                         self?.tableView?.dataSource = self
                         self?.tableView?.delegate = self
+                        self?.tableView?.separatorInset = UIEdgeInsets.zero
                         self?.tableView?.register(TZAlbumCell.self, forCellReuseIdentifier: "TZAlbumCell")
                         self?.view.addSubview(stongSelf.tableView!)
                     } else {

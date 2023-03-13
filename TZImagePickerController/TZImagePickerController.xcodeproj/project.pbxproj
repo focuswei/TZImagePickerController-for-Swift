@@ -234,7 +234,7 @@
 			attributes = {
 				LastSwiftUpdateCheck = 1120;
 				LastUpgradeCheck = 1120;
-				ORGANIZATIONNAME = centaline;
+				ORGANIZATIONNAME = "";
 				TargetAttributes = {
 					44DFA071237A4AA700AFA39B = {
 						CreatedOnToolsVersion = 11.2;
@@ -494,7 +494,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.centa.imagepicker.TZImagePickerController;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -515,7 +515,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.centa.imagepicker.TZImagePickerController;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;

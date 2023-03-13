@@ -16,15 +16,16 @@ class TZAlbumCell: UITableViewCell {
     
     private var titleLabel: UILabel
     private var posterImageView: UIImageView
-    
+    let titleFont = UIFont.systemFont(ofSize: 16)
+    let titleTextColor = UIColor.black
     var model: TZAlbumModel? {
         didSet {
             guard let myModel = self.model else { return }
-            let attributes_name: [NSAttributedString.Key:Any] = [NSAttributedString.Key.font:UIFont.systemFont(ofSize: 16),NSAttributedString.Key.foregroundColor:UIColor.black]
-            let nameString = NSMutableAttributedString.init(string: myModel.name, attributes: attributes_name)
+            let attributes_name: [NSAttributedString.Key:Any] = [NSAttributedString.Key.font:titleFont,NSAttributedString.Key.foregroundColor:titleTextColor]
+            let nameString = NSMutableAttributedString.init(string: "\(myModel.name)\n", attributes: attributes_name)
             
             let attributes_count: [NSAttributedString.Key:Any] = [NSAttributedString.Key.font:UIFont.systemFont(ofSize: 16),NSAttributedString.Key.foregroundColor:UIColor.black]
-            let countString = NSMutableAttributedString.init(string: String(format: "  (%zd)", myModel.count), attributes: attributes_count)
+            let countString = NSMutableAttributedString.init(string: String(format: "%zd", myModel.count), attributes: attributes_count)
             
             nameString.append(countString)
             self.titleLabel.attributedText = nameString
@@ -55,12 +56,13 @@ class TZAlbumCell: UITableViewCell {
         selectedCountButton.clipsToBounds = true
         selectedCountButton.backgroundColor = UIColor.red
         selectedCountButton.setTitleColor(UIColor.white, for: .normal)
-        selectedCountButton.titleLabel?.font = UIFont.systemFont(ofSize: 15)
+        selectedCountButton.titleLabel?.font = UIFont.systemFont(ofSize: 14)
         self.contentView.addSubview(selectedCountButton)
         
         
-        titleLabel.font = UIFont.boldSystemFont(ofSize: 17)
-        titleLabel.textColor = UIColor.black
+        titleLabel.font = titleFont
+        titleLabel.textColor = titleTextColor
+        titleLabel.numberOfLines = 2
         titleLabel.textAlignment = .left
         self.contentView.addSubview(titleLabel)
         
@@ -80,11 +82,11 @@ class TZAlbumCell: UITableViewCell {
 
     override func layoutSubviews() {
         super.layoutSubviews()
-        selectedCountButton.frame = CGRect(x: self.contentView.tz_width - 24, y: 23, width: 24, height: 24)
+        selectedCountButton.frame = CGRect(x: self.contentView.tz_width - 50, y: 23, width: 24, height: 24)
         let titleHeight = ceil(self.titleLabel.font.lineHeight)
-        self.titleLabel.frame = CGRect(x: 80, y: (self.tz_height - titleHeight)/2, width: self.tz_width - 80 - 50, height: titleHeight)
+        self.titleLabel.frame = CGRect(x: 105, y: 0, width: self.tz_width - 80 - 50, height: self.contentView.tz_height)
         
-        self.posterImageView.frame = CGRect(x: 0, y: 0, width: 70, height: 70)
+        self.posterImageView.frame = CGRect(x: 20, y: 10, width: 70, height: 70)
         self.albumCellDidLayoutSubviewsClosure?(self, posterImageView, titleLabel)
     }
 
