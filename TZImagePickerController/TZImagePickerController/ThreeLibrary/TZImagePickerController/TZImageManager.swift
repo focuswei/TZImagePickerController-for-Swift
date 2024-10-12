@@ -98,7 +98,7 @@ final class TZImageManager: NSObject,TZImagePickerControllerDelegate  {
 
         let option = self.configurePHFetchOptions(allowPickingVideo: allowPickingVideo, allowPickingImage: allowPickingImage)
         
-        let smartAlbums: PHFetchResult = PHAssetCollection.fetchAssetCollections(with: .smartAlbum, subtype: .albumRegular, options: nil)
+        let smartAlbums: PHFetchResult = PHAssetCollection.fetchAssetCollections(with: .smartAlbum, subtype: .any, options: nil)
         smartAlbums.enumerateObjects { (collection, index, stop) in
             if collection.estimatedAssetCount <= 0 { return }
             if self.isCameraRollAlbum(metadata: collection) {
@@ -116,12 +116,12 @@ final class TZImageManager: NSObject,TZImagePickerControllerDelegate  {
         let option = self.configurePHFetchOptions(allowPickingVideo: allowPickingVideo, allowPickingImage: allowPickingImage)
         
         let myPhotoStreamAlbum: PHFetchResult = PHAssetCollection.fetchAssetCollections(with: .album, subtype: .albumMyPhotoStream, options: nil)
-        let smartAlbums: PHFetchResult = PHAssetCollection.fetchAssetCollections(with: .smartAlbum, subtype: .albumRegular, options: nil)
+        let smartAlbums: PHFetchResult = PHAssetCollection.fetchAssetCollections(with: .smartAlbum, subtype: .any, options: nil)
         let syncedAlbums: PHFetchResult = PHAssetCollection.fetchAssetCollections(with: .album, subtype: .albumSyncedAlbum, options: nil)
         let sharedAlbums = PHAssetCollection.fetchAssetCollections(with: .album, subtype: .albumCloudShared, options: nil)
         let otherAppOp = PHFetchOptions()
         otherAppOp.includeAssetSourceTypes = .typeUserLibrary
-        let otherAppAlbums = PHAssetCollection.fetchAssetCollections(with: .album, subtype: .albumRegular, options: otherAppOp)
+        let otherAppAlbums = PHAssetCollection.fetchAssetCollections(with: .album, subtype: .any, options: otherAppOp)
         let allAlbums: Array<PHFetchResult<PHAssetCollection>> = [myPhotoStreamAlbum,smartAlbums, syncedAlbums, sharedAlbums,otherAppAlbums]
 
         allAlbums.map({ albums in
